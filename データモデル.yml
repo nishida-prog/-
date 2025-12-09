@@ -1,0 +1,78 @@
+meta:
+  title: "○○社 鳥瞰データモデル"
+  version: "v1.0"
+  orientation: "horizontal"  # horizontal / vertical
+
+config:
+  categories:
+    master:
+      label: "マスタ"
+      color: "#F4CCCC"
+    plan:
+      label: "計画"
+      color: "#FFF2CC"
+    transaction:
+      label: "トランザクション"
+      color: "#CFE2F3"
+
+  layer_order:
+    - master
+    - plan
+    - transaction
+
+  layout:
+    lane_direction:
+      horizontal: "left_to_right"
+      vertical: "top_to_bottom"
+
+lanes:
+  - id: "common_master"
+    label: "共通マスタシステム"
+    order: 0
+
+  - id: "scm"
+    label: "SCMシステム"
+    order: 1
+
+  - id: "purchase"
+    label: "購買システム"
+    order: 2
+
+  - id: "production"
+    label: "生産システム"
+    order: 3
+
+  - id: "sales"
+    label: "販売システム"
+    order: 4
+
+  - id: "accounting"
+    label: "会計システム"
+    order: 5
+
+entities:
+  # （中身はこれまで通り。省略）
+  - id: "customer"
+    label: "顧客"
+    lane: "sales"
+    type: "master"
+  # ...
+
+# ★ ここが「システム間の順番」を定義するセクション
+system_flow:
+  # システムが流れる順番（左→右 / 上→下 の並び）
+  steps:
+    - "common_master"
+    - "scm"
+    - "purchase"
+    - "production"
+    - "sales"
+    - "accounting"
+
+  # もし間に別ルートがある場合は複数定義も可能
+  # e.g.
+  # alt_flows:
+  #   - id: "hr_to_accounting"
+  #     steps:
+  #       - "hr"
+  #       - "accounting"
