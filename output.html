@@ -8,12 +8,12 @@
     :root {
       --border: {{styles.colors.border}};
       --lane-bg: {{styles.colors.lane_bg}};
-      --master: {{styles.colors.master}};
-      --plan: {{styles.colors.plan}};
-      --tx: {{styles.colors.tx}};
       --body-bg: {{styles.colors.body_bg}};
       --text-color: {{styles.colors.text}};
       --lane-border: {{styles.lane_border}}px;
+      {{#styles.types}}
+      --type-{{key}}: {{color}};
+      {{/styles.types}}
     }
     * { box-sizing: border-box; }
     body {
@@ -47,9 +47,9 @@
       border-radius: 2px;
       margin-right: 6px;
     }
-    .legend-swatch.master { background: var(--master); }
-    .legend-swatch.plan { background: var(--plan); }
-    .legend-swatch.tx { background: var(--tx); }
+    {{#styles.types}}
+    .legend-swatch.type-{{key}} { background: var(--type-{{key}}); }
+    {{/styles.types}}
     .legend-swatch.lane { background: var(--lane-bg); border-color: var(--border); }
     .legend-swatch.border { background: #ffffff; border-color: var(--border); }
     .grid {
@@ -77,18 +77,24 @@
       margin-bottom: 6px;
     }
     .card {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       padding: 6px 10px;
       border-radius: 3px;
+      border: 1px solid var(--border);
       font-size: 13px;
       font-weight: 700;
       margin: 4px 6px 4px 0;
       color: #000;
-      white-space: nowrap;
+      white-space: normal;
+      line-height: 1.3;
+      word-break: keep-all;
+      max-width: calc(100% - 12px);
+      min-width: 64px;
     }
-    .master { background: var(--master); }
-    .plan { background: var(--plan); }
-    .tx { background: var(--tx); }
+    {{#styles.types}}
+    .card.type-{{key}} { background: var(--type-{{key}}); }
+    {{/styles.types}}
     .arrows {
       position: absolute;
       top: 0;
@@ -107,6 +113,11 @@
 <body>
   <main>
     <div class="legend" aria-live="polite">
+      {{#styles.types}}
+      <span class="legend-item">
+        <span class="legend-swatch type-{{key}}"></span>{{label}}
+      </span>
+      {{/styles.types}}
       {{#legend.items}}
       <span class="legend-item">
         <span class="legend-swatch {{key}}"></span>{{label}}
@@ -126,12 +137,12 @@
       </svg>
       <div class="lanes-layer">
         {{#lanes}}
-        <section class="lane" style="left:{{x}}px; top:{{y}}px; width:{{width}}px; height:{{height}}px;">
+        <section class="lane" style="left:{{x}}px; top:{{y}}px; width:{{width}}px;{{#height}} height:{{height}}px;{{/height}}">
           <span class="lane-title">{{label}}</span>
           {{#groups}}
           <div{{#marginTop}} style="margin-top: {{marginTop}}px;"{{/marginTop}}>
             {{#items}}
-            <div class="card {{type}}" style="{{#block}}display:block;{{/block}}{{#marginTop}}margin-top: {{marginTop}}px;{{/marginTop}}{{#marginLeft}}margin-left: {{marginLeft}}px;{{/marginLeft}}">{{label}}</div>
+            <div class="card type-{{type}}" style="{{#block}}display:block;{{/block}}{{#marginTop}}margin-top: {{marginTop}}px;{{/marginTop}}{{#marginLeft}}margin-left: {{marginLeft}}px;{{/marginLeft}}">{{label}}</div>
             {{/items}}
           </div>
           {{/groups}}

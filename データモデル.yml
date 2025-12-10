@@ -7,10 +7,17 @@ styles:
     lane_bg: "#ffffff"
     body_bg: "#ffffff"
     text: "#0d0d0d"
-    master: "#f8c9c9"
-    plan: "#fff59d"
-    tx: "#d5e9ff"
   lane_border: 3
+  types:
+    - key: master
+      label: "マスタ"
+      color: "#f8c9c9"
+    - key: plan
+      label: "計画"
+      color: "#fff59d"
+    - key: tx
+      label: "トランザクション"
+      color: "#d5e9ff"
 
 layout:
   grid:
@@ -19,12 +26,6 @@ layout:
 
 legend:
   items:
-    - key: master
-      label: "マスタ"
-    - key: plan
-      label: "計画"
-    - key: tx
-      label: "トランザクション"
     - key: lane
       label: "レーン"
     - key: border

@@ -1,0 +1,280 @@
+meta:
+  title: "Medium Sample"
+
+styles:
+  colors:
+    border: "#2d2d2d"
+    lane_bg: "#ffffff"
+    body_bg: "#ffffff"
+    text: "#0d0d0d"
+    master: "#f6ced8"
+    plan: "#fff5a5"
+    tx: "#cfe2f3"
+  lane_border: 2
+
+layout:
+  grid: {}
+
+legend:
+  items:
+    - key: master
+      label: "Master"
+    - key: plan
+      label: "Plan"
+    - key: tx
+      label: "Transaction"
+    - key: lane
+      label: "Lane"
+    - key: border
+      label: "Border"
+
+arrows: []
+
+lanes:
+  - id: lane1
+    label: "Lane 1"
+    groups:
+      - items:
+          - label: "Item 1-1"
+            type: master
+          - label: "Item 1-2"
+            type: master
+          - label: "Item 1-3"
+            type: master
+          - label: "Item 1-4"
+            type: master
+      - marginTop: 10
+        items:
+          - label: "Plan 1-1"
+            type: plan
+          - label: "Plan 1-2"
+            type: plan
+          - label: "Plan 1-3"
+            type: plan
+      - marginTop: 10
+        items:
+          - label: "TX 1-1"
+            type: tx
+          - label: "TX 1-2"
+            type: tx
+          - label: "TX 1-3"
+            type: tx
+          - label: "TX 1-4"
+            type: tx
+
+  - id: lane2
+    label: "Lane 2"
+    groups:
+      - items:
+          - label: "Item 2-1"
+            type: master
+          - label: "Item 2-2"
+            type: master
+          - label: "Item 2-3"
+            type: master
+          - label: "Item 2-4"
+            type: master
+      - marginTop: 10
+        items:
+          - label: "Plan 2-1"
+            type: plan
+          - label: "Plan 2-2"
+            type: plan
+          - label: "Plan 2-3"
+            type: plan
+      - marginTop: 10
+        items:
+          - label: "TX 2-1"
+            type: tx
+          - label: "TX 2-2"
+            type: tx
+          - label: "TX 2-3"
+            type: tx
+          - label: "TX 2-4"
+            type: tx
+
+  - id: lane3
+    label: "Lane 3"
+    groups:
+      - items:
+          - label: "Item 3-1"
+            type: master
+          - label: "Item 3-2"
+            type: master
+          - label: "Item 3-3"
+            type: master
+          - label: "Item 3-4"
+            type: master
+      - marginTop: 10
+        items:
+          - label: "Plan 3-1"
+            type: plan
+          - label: "Plan 3-2"
+            type: plan
+          - label: "Plan 3-3"
+            type: plan
+      - marginTop: 10
+        items:
+          - label: "TX 3-1"
+            type: tx
+          - label: "TX 3-2"
+            type: tx
+          - label: "TX 3-3"
+            type: tx
+          - label: "TX 3-4"
+            type: tx
+
+  - id: lane4
+    label: "Lane 4"
+    groups:
+      - items:
+          - label: "Item 4-1"
+            type: master
+          - label: "Item 4-2"
+            type: master
+          - label: "Item 4-3"
+            type: master
+          - label: "Item 4-4"
+            type: master
+      - marginTop: 10
+        items:
+          - label: "Plan 4-1"
+            type: plan
+          - label: "Plan 4-2"
+            type: plan
+          - label: "Plan 4-3"
+            type: plan
+      - marginTop: 10
+        items:
+          - label: "TX 4-1"
+            type: tx
+          - label: "TX 4-2"
+            type: tx
+          - label: "TX 4-3"
+            type: tx
+          - label: "TX 4-4"
+            type: tx
+
+  - id: lane5
+    label: "Lane 5"
+    groups:
+      - items:
+          - label: "Item 5-1"
+            type: master
+          - label: "Item 5-2"
+            type: master
+          - label: "Item 5-3"
+            type: master
+          - label: "Item 5-4"
+            type: master
+      - marginTop: 10
+        items:
+          - label: "Plan 5-1"
+            type: plan
+          - label: "Plan 5-2"
+            type: plan
+          - label: "Plan 5-3"
+            type: plan
+      - marginTop: 10
+        items:
+          - label: "TX 5-1"
+            type: tx
+          - label: "TX 5-2"
+            type: tx
+          - label: "TX 5-3"
+            type: tx
+          - label: "TX 5-4"
+            type: tx
+
+  - id: lane6
+    label: "Lane 6"
+    groups:
+      - items:
+          - label: "Item 6-1"
+            type: master
+          - label: "Item 6-2"
+            type: master
+          - label: "Item 6-3"
+            type: master
+          - label: "Item 6-4"
+            type: master
+      - marginTop: 10
+        items:
+          - label: "Plan 6-1"
+            type: plan
+          - label: "Plan 6-2"
+            type: plan
+          - label: "Plan 6-3"
+            type: plan
+      - marginTop: 10
+        items:
+          - label: "TX 6-1"
+            type: tx
+          - label: "TX 6-2"
+            type: tx
+          - label: "TX 6-3"
+            type: tx
+          - label: "TX 6-4"
+            type: tx
+
+  - id: lane7
+    label: "Lane 7"
+    groups:
+      - items:
+          - label: "Item 7-1"
+            type: master
+          - label: "Item 7-2"
+            type: master
+          - label: "Item 7-3"
+            type: master
+          - label: "Item 7-4"
+            type: master
+      - marginTop: 10
+        items:
+          - label: "Plan 7-1"
+            type: plan
+          - label: "Plan 7-2"
+            type: plan
+          - label: "Plan 7-3"
+            type: plan
+      - marginTop: 10
+        items:
+          - label: "TX 7-1"
+            type: tx
+          - label: "TX 7-2"
+            type: tx
+          - label: "TX 7-3"
+            type: tx
+          - label: "TX 7-4"
+            type: tx
+
+  - id: lane8
+    label: "Lane 8"
+    groups:
+      - items:
+          - label: "Item 8-1"
+            type: master
+          - label: "Item 8-2"
+            type: master
+          - label: "Item 8-3"
+            type: master
+          - label: "Item 8-4"
+            type: master
+      - marginTop: 10
+        items:
+          - label: "Plan 8-1"
+            type: plan
+          - label: "Plan 8-2"
+            type: plan
+          - label: "Plan 8-3"
+            type: plan
+      - marginTop: 10
+        items:
+          - label: "TX 8-1"
+            type: tx
+          - label: "TX 8-2"
+            type: tx
+          - label: "TX 8-3"
+            type: tx
+          - label: "TX 8-4"
+            type: tx
