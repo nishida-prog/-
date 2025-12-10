@@ -7,27 +7,53 @@
   <style>
     :root {
       --border: #4b77be;
-      --lane-bg: #050505;
+      --lane-bg: #ffffff;
       --master: #f8c9c9;
       --plan: #fff59d;
       --tx: #d5e9ff;
+      --body-bg: #ffffff;
+      --text-color: #0d0d0d;
+      --lane-border: 3px;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
-      background: #0d0d0d;
-      color: #f8f8f8;
+      background: var(--body-bg);
+      color: var(--text-color);
     }
     main {
       width: 1180px;
       margin: 10px auto 20px;
     }
+    .legend {
+      width: 1180px;
+      margin: 0 auto 10px;
+      font-size: 13px;
+      color: var(--text-color);
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 16px;
+    }
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border: 1px solid #999;
+      border-radius: 2px;
+      margin-right: 6px;
+    }
+    .grid {
+      position: relative;
+      width: 1180px;
+      height: 920px;
+    }
     .lane {
       position: absolute;
-      border: 2px solid var(--border);
+      border: var(--lane-border) solid var(--border);
       background: var(--lane-bg);
-      color: #cfe3ff;
+      color: var(--text-color);
       padding: 6px;
       box-sizing: border-box;
     }
@@ -51,17 +77,45 @@
     .master { background: var(--master); }
     .plan { background: var(--plan); }
     .tx { background: var(--tx); }
-    .grid {
-      position: relative;
-      width: 1180px;
-      height: 920px;
+    .arrows {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .arrows path {
+      stroke: var(--border);
+      stroke-width: 2.2;
+      fill: none;
+      marker-end: url(#arrowhead);
     }
   </style>
 </head>
 <body>
   <main>
+    <div class="legend" aria-hidden="true">
+      <span class="legend-item"><span class="legend-swatch" style="background: var(--master);"></span>マスタ</span>
+      <span class="legend-item"><span class="legend-swatch" style="background: var(--plan);"></span>計画</span>
+      <span class="legend-item"><span class="legend-swatch" style="background: var(--tx);"></span>トランザクション</span>
+      <span class="legend-item"><span class="legend-swatch" style="background: var(--lane-bg); border-color: var(--border);"></span>レーン</span>
+      <span class="legend-item"><span class="legend-swatch" style="background: #ffffff; border-color: var(--border);"></span>矢印/枠色（境界線）</span>
+    </div>
     <div class="grid">
-      <!-- 人事システム -->
+      <svg class="arrows" width="1180" height="920" viewBox="0 0 1180 920" aria-hidden="true">
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+            <polygon points="0 0, 10 4, 0 8" fill="var(--border)"></polygon>
+          </marker>
+        </defs>
+        <path d="M170 130 L208 130"></path>
+        <path d="M593 150 L593 278"></path>
+        <path d="M593 448 L593 470 L150 470 L150 486"></path>
+        <path d="M290 651 L328 651"></path>
+        <path d="M588 651 L626 651"></path>
+        <path d="M886 651 L924 651"></path>
+      </svg>
+
       <section class="lane" style="left:10px; top:20px; width:160px; height:220px;">
         <span class="lane-title">人事システム</span>
         <div class="card master">組織</div><br>
@@ -69,8 +123,7 @@
         <div class="card tx">異動</div>
       </section>
 
-      <!-- 共通マスタシステム -->
-      <section class="lane" style="left:180px; top:20px; width:770px; height:130px;">
+      <section class="lane" style="left:208px; top:20px; width:770px; height:130px;">
         <span class="lane-title">共通マスタシステム</span>
         <div class="card master">企業</div>
         <div class="card master">国</div>
@@ -78,8 +131,7 @@
         <div class="card master">数量単位</div>
       </section>
 
-      <!-- SCMシステム -->
-      <section class="lane" style="left:180px; top:160px; width:770px; height:170px;">
+      <section class="lane" style="left:208px; top:278px; width:770px; height:170px;">
         <span class="lane-title">SCMシステム</span>
         <div class="card master">品目カテゴリ</div>
         <div class="card master">SCM品目</div>
@@ -87,8 +139,7 @@
         <div class="card tx" style="display:block; margin-top:12px;">統合在庫</div>
       </section>
 
-      <!-- 購買システム -->
-      <section class="lane" style="left:10px; top:350px; width:280px; height:330px;">
+      <section class="lane" style="left:10px; top:486px; width:280px; height:330px;">
         <span class="lane-title">購買システム</span>
         <div>
           <div class="card master">仕入先</div>
@@ -106,8 +157,7 @@
         </div>
       </section>
 
-      <!-- 生産システム -->
-      <section class="lane" style="left:300px; top:350px; width:260px; height:330px;">
+      <section class="lane" style="left:328px; top:486px; width:260px; height:330px;">
         <span class="lane-title">生産システム</span>
         <div>
           <div class="card master">生産品目</div>
@@ -122,8 +172,7 @@
         </div>
       </section>
 
-      <!-- 販売システム -->
-      <section class="lane" style="left:570px; top:350px; width:260px; height:330px;">
+      <section class="lane" style="left:626px; top:486px; width:260px; height:330px;">
         <span class="lane-title">販売システム</span>
         <div>
           <div class="card master">顧客</div>
@@ -142,8 +191,7 @@
         </div>
       </section>
 
-      <!-- 会計システム -->
-      <section class="lane" style="left:840px; top:350px; width:240px; height:330px;">
+      <section class="lane" style="left:924px; top:486px; width:240px; height:330px;">
         <span class="lane-title">会計システム</span>
         <div>
           <div class="card master">相手先</div>
