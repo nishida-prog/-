@@ -2,6 +2,7 @@ meta:
   title: "鳥瞰データモデル（業務横断）"
 
 styles:
+  font_family: "\"Hiragino Sans\", \"Noto Sans JP\", sans-serif"
   colors:
     border: "#4b77be"
     lane_bg: "#ffffff"
@@ -44,6 +45,20 @@ arrows:
     path: "M588 651 L626 651"
   - id: sales_to_accounting
     path: "M886 651 L924 651"
+
+connections:
+  - from: hr
+    to: common_master
+  - from: common_master
+    to: scm
+  - from: scm
+    to: purchase
+  - from: purchase
+    to: production
+  - from: production
+    to: sales
+  - from: sales
+    to: accounting
 
 lanes:
   - id: hr
