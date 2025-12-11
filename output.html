@@ -3,18 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>鳥瞰データモデル（業務横断）</title>
+  <title>{{meta.title}}</title>
   <style>
     :root {
-      --border: #4b77be;
-      --lane-bg: #ffffff;
-      --body-bg: #ffffff;
-      --text-color: #0d0d0d;
-      --lane-border: 3px;
-      --font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
-      --type-master: #f8c9c9;
-      --type-plan: #fff59d;
-      --type-tx: #d5e9ff;
+      --border: {{styles.colors.border}};
+      --lane-bg: {{styles.colors.lane_bg}};
+      --body-bg: {{styles.colors.body_bg}};
+      --text-color: {{styles.colors.text}};
+      --lane-border: {{styles.lane_border}}px;
+      --font-family: {{styles.font_family}};
       --stair-step-x: 10mm;   /* 1.0cm spacing */
       --stair-step-y: 10mm;   /* 1.0cm spacing */
     }
@@ -26,11 +23,11 @@
       color: var(--text-color);
     }
     main {
-      width: 1180px;
+      width: {{layout.grid.width}}px;
       margin: 10px auto 20px;
     }
     .legend {
-      width: 1180px;
+      width: {{layout.grid.width}}px;
       margin: 0 auto 10px;
       font-size: 13px;
       color: var(--text-color);
@@ -48,15 +45,10 @@
       border-radius: 2px;
       margin-right: 6px;
     }
-    .legend-swatch.type-master { background: var(--type-master); }
-    .legend-swatch.type-plan { background: var(--type-plan); }
-    .legend-swatch.type-tx { background: var(--type-tx); }
-    .legend-swatch.lane { background: var(--lane-bg); border-color: var(--border); }
-    .legend-swatch.border { background: #ffffff; border-color: var(--border); }
     .grid {
       position: relative;
-      width: 1180px;
-      min-height: 920px;
+      width: {{layout.grid.width}}px;
+      min-height: {{layout.grid.height}}px;
       overflow-x: auto;
       overflow-y: auto;
     }
@@ -137,116 +129,32 @@
       min-width: 64px;
     }
     .lane-group .card { display: flex; margin: 0; }
-    .card.type-master { background: var(--type-master); }
-    .card.type-plan { background: var(--type-plan); }
-    .card.type-tx { background: var(--type-tx); }
+{{#styles.types}}
+    .card.type-{{key}} { background: {{color}}; }
+{{/styles.types}}
   </style>
 </head>
 <body>
-  <main>
-    <div class="legend" aria-live="polite">
-      <span class="legend-item"><span class="legend-swatch type-master"></span>マスタ</span>
-      <span class="legend-item"><span class="legend-swatch type-plan"></span>計画</span>
-      <span class="legend-item"><span class="legend-swatch type-tx"></span>トランザクション</span>
-      <span class="legend-item"><span class="legend-swatch lane"></span>レーン</span>
-      <span class="legend-item"><span class="legend-swatch border"></span>矢印/枠色（境界線）</span>
+  <main aria-live="polite">
+    <div class="legend">
+{{#legend.items}}
+      <span class="legend-item"><span class="legend-swatch" style="background: {{color}}; border-color: {{border}};"></span>{{label}}</span>
+{{/legend.items}}
     </div>
     <div class="grid">
       <div class="lanes-layer">
-        <section class="lane" style="--lane-index:0; width:160px; min-width:160px;">
-          <span class="lane-title">人事システム</span>
-          <div class="lane-group">
-            <div class="card type-master" style="display:block;">組織</div>
-            <div class="card type-master" style="display:block;">従業員</div>
-            <div class="card type-tx" style="display:block;">異動</div>
+{{#lanes}}
+        <section class="lane" style="--lane-index: {{lane_index}}; width: {{width}}px; min-width: {{width}}px;{{#height}} min-height: {{height}}px;{{/height}}">
+          <span class="lane-title">{{label}}</span>
+{{#groups}}
+          <div class="lane-group"{{#marginTop}} style="margin-top: {{marginTop}}px;"{{/marginTop}}>
+{{#items}}
+            <div class="card{{#type}} type-{{type}}{{/type}}" style="{{#block}}display:block;{{/block}}{{#marginTop}} margin-top: {{marginTop}}px;{{/marginTop}}{{#marginLeft}} margin-left: {{marginLeft}}px;{{/marginLeft}}">{{label}}</div>
+{{/items}}
           </div>
+{{/groups}}
         </section>
-
-        <section class="lane" style="--lane-index:1; width:770px; min-width:770px;">
-          <span class="lane-title">共通マスタシステム</span>
-          <div class="lane-group">
-            <div class="card type-master">企業</div>
-            <div class="card type-master">国</div>
-            <div class="card type-master">通貨</div>
-            <div class="card type-master">数量単位</div>
-          </div>
-        </section>
-
-        <section class="lane" style="--lane-index:2; width:770px; min-width:770px;">
-          <span class="lane-title">SCMシステム</span>
-          <div class="lane-group">
-            <div class="card type-master">品目カテゴリ</div>
-            <div class="card type-master">SCM品目</div>
-            <div class="card type-master">SCM拠点</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-tx" style="display:block;">統合在庫</div>
-          </div>
-        </section>
-
-        <section class="lane" style="--lane-index:3; width:280px; min-width:280px;">
-          <span class="lane-title">購買システム</span>
-          <div class="lane-group">
-            <div class="card type-master">仕入先</div>
-            <div class="card type-master">購買品目</div>
-            <div class="card type-master">購買拠点</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-plan">購買計画</div>
-            <div class="card type-plan">購買実績</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-tx">発注</div>
-            <div class="card type-tx" style="display:block; margin-top: 14px;">入荷</div>
-            <div class="card type-plan" style="display:block; margin-top: 14px; margin-left: 110px;">支払</div>
-          </div>
-        </section>
-
-        <section class="lane" style="--lane-index:4; width:260px; min-width:260px;">
-          <span class="lane-title">生産システム</span>
-          <div class="lane-group">
-            <div class="card type-master">生産品目</div>
-            <div class="card type-master">生産拠点</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-plan">生産計画</div>
-            <div class="card type-plan">生産実績</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-tx" style="display:block;">生産</div>
-          </div>
-        </section>
-
-        <section class="lane" style="--lane-index:5; width:260px; min-width:260px;">
-          <span class="lane-title">販売システム</span>
-          <div class="lane-group">
-            <div class="card type-master">顧客</div>
-            <div class="card type-master">販売品目</div>
-            <div class="card type-master">物流拠点</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-plan">販売計画</div>
-            <div class="card type-plan">販売実績</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-tx">受注</div>
-            <div class="card type-tx" style="display:block;">出荷（売上）</div>
-            <div class="card type-tx" style="display:block; margin-top: 14px;">請求</div>
-            <div class="card type-tx" style="display:block; margin-top: 14px;">入金</div>
-          </div>
-        </section>
-
-        <section class="lane" style="--lane-index:6; width:240px; min-width:240px;">
-          <span class="lane-title">会計システム</span>
-          <div class="lane-group">
-            <div class="card type-master">相手先</div>
-            <div class="card type-master">勘定科目</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-plan">BS/PL</div>
-            <div class="card type-plan" style="display:block; margin-top: 80px;">仕訳</div>
-          </div>
-        </section>
+{{/lanes}}
       </div>
     </div>
   </main>

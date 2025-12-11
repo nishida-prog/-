@@ -1,0 +1,94 @@
+
+  <div class="title">{{#meta.is_quotation}}見積書{{/meta.is_quotation}}{{#meta.is_invoice}}請求書{{/meta.is_invoice}}{{#meta.is_delivery}}納品書{{/meta.is_delivery}}</div>
+
+  <div class="addr">
+    <div class="left">
+      <p>〒{{customer.postal}}<br>{{customer.address_line1}}{{#customer.address_line2}}<br>{{customer.address_line2}}{{/customer.address_line2}}</p>
+      <p>{{customer.company}}<br>御中　{{customer.attention}} </p>
+      <p class="subject-line">{{meta.subject}}</p>
+    </div>
+    <div class="right">
+      <div style="font-size:12px;">発行日:{{meta.issue_date}}<br>伝票番号:{{meta.slip_no}}</div>
+      <div class="box" style="margin-top:4mm; text-align:center; margin-left:-13mm; padding:6mm; border:none;">
+        {{#seller.logo_url}}<img src="{{seller.logo_url}}" alt="LOGO" class="logo"><br>{{/seller.logo_url}}
+        <div class="seller-info">
+          {{seller.name}}<br>
+          〒{{seller.postal}}　{{seller.address}}<br>
+          電話:{{seller.tel}}<br>
+          E-mail:{{seller.email}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="amount-pay">
+    <div class="amount-box">
+      <div class="label">
+        {{#meta.is_quotation}}{{amount_box.quotation_label}}{{/meta.is_quotation}}
+        {{#meta.is_invoice}}{{amount_box.invoice_label}}{{/meta.is_invoice}}
+        {{#meta.is_delivery}}{{amount_box.delivery_label}}{{/meta.is_delivery}}
+      </div>
+      <div class="val">{{totals.total}}円</div>
+    </div>
+    <div class="pay-box">
+      <table>
+        <tr>
+          <th>振込先</th>
+          <td>
+            {{payment.bank}}<br>
+            {{payment.branch}}<br>
+            （{{payment.account_type}}:{{payment.account_no}}）<br>
+            {{seller.name}}
+          </td>
+        </tr>
+        <tr><th>支払期日</th><td>{{payment.due_date}}</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="items">
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th class="desc">摘要</th>
+          <th class="qty">数量</th>
+          <th class="unit">単価</th>
+          <th class="amt">金額</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#items}}
+        <tr>
+          <td class="desc no-rule">{{name}}</td>
+          <td class="qty">{{qty}}</td>
+          <td class="unit">{{unit_price}}</td>
+          <td class="amt">{{amount}}</td>
+        </tr>
+        {{#breakdown}}
+        <tr class="sub">
+          <td class="desc" colspan="4"><span class="bullet"></span>{{.}}</td>
+        </tr>
+        {{/breakdown}}
+        <tr class="section-gap"><td colspan="4">&nbsp;</td></tr>
+        {{/items}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="totals-row" style="margin-top:2mm;">
+    <div></div>
+    <div class="totals">
+      <table>
+        <tr><td class="label">小計</td><td class="val">{{totals.subtotal}}</td></tr>
+        <tr><td class="label">消費税10%</td><td class="val">{{totals.tax}}</td></tr>
+        <tr class="grand"><td class="label">合計金額</td><td class="val">{{totals.total}}</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="note">
+    <div class="head">備考</div>
+    <div class="body">{{notes}}</div>
+  </div>
+
+</div></div>

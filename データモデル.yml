@@ -27,10 +27,26 @@ layout:
 
 legend:
   items:
+    - key: master
+      label: "マスタ"
+      color: "#f8c9c9"
+      border: "#4b77be"
+    - key: plan
+      label: "計画"
+      color: "#fff59d"
+      border: "#4b77be"
+    - key: tx
+      label: "トランザクション"
+      color: "#d5e9ff"
+      border: "#4b77be"
     - key: lane
       label: "レーン"
+      color: "#ffffff"
+      border: "#4b77be"
     - key: border
       label: "矢印/枠色（境界線）"
+      color: "#ffffff"
+      border: "#4b77be"
 
 arrows:
   - id: hr_to_common
@@ -63,6 +79,7 @@ connections:
 lanes:
   - id: hr
     label: "人事システム"
+    lane_index: 0
     x: 10
     y: 20
     width: 160
@@ -81,6 +98,7 @@ lanes:
 
   - id: common_master
     label: "共通マスタシステム"
+    lane_index: 1
     x: 208
     y: 20
     width: 770
@@ -98,6 +116,7 @@ lanes:
 
   - id: scm
     label: "SCMシステム"
+    lane_index: 2
     x: 208
     y: 278
     width: 770
@@ -118,6 +137,7 @@ lanes:
 
   - id: purchase
     label: "購買システム"
+    lane_index: 3
     x: 10
     y: 486
     width: 280
@@ -152,6 +172,7 @@ lanes:
 
   - id: production
     label: "生産システム"
+    lane_index: 4
     x: 328
     y: 486
     width: 260
@@ -176,6 +197,7 @@ lanes:
 
   - id: sales
     label: "販売システム"
+    lane_index: 5
     x: 626
     y: 486
     width: 260
@@ -214,6 +236,7 @@ lanes:
 
   - id: accounting
     label: "会計システム"
+    lane_index: 6
     x: 924
     y: 486
     width: 240
