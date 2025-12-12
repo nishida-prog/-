@@ -3,238 +3,268 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>鳥瞰データモデル（業務横断）</title>
+  <title>{{page.title}}</title>
   <style>
     :root {
-      --border: #4b77be;
-      --lane-bg: #ffffff;
-      --body-bg: #ffffff;
-      --text-color: #0d0d0d;
-      --lane-border: 3px;
-      --font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
-      --stair-step-x: 10mm;   /* 1.0cm spacing */
-      --stair-step-y: 10mm;   /* 1.0cm spacing */
+      --blue: #1b3dff;
+      --pink: #e8c9d8;
+      --aqua: #c7f3ff;
+      --yellow: #ffeeb9;
+      --line: #000;
+      --line-thickness: 3px;
+      --gap: 40px;
+      --font: "MS UI Gothic", "Yu Gothic", "Hiragino Sans", "Meiryo", sans-serif;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: var(--font-family);
-      background: var(--body-bg);
-      color: var(--text-color);
+      background: #f8faff;
+      display: block;
+      padding: 20px;
+      font-family: var(--font);
     }
-    main {
-      width: 1180px;
-      margin: 10px auto 20px;
+    .page {
+      width: 1360px;
+      max-width: 1360px;
+      margin: 0;
     }
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .page-title {
+      margin: 0;
+      font-size: 18px;
+      color: #0f2b8f;
+    }
+    .canvas-wrapper {
+      width: 1360px;
+      border: 1px solid #dfe6ff;
+      background: #fff;
+      box-shadow: 0 16px 32px rgba(0,0,0,0.08);
+      padding: 20px;
+      position: relative;
+      margin: 0;
+    }
+    .canvas {
+      display: grid;
+      grid-template-columns: repeat({{grid.columns}}, 300px);
+      gap: {{grid.gap}};
+      width: 1360px;
+      position: relative;
+      z-index: 1;
+    }
+    .section {
+      position: relative;
+      border: 3px solid var(--blue);
+      border-radius: 2px;
+      padding: 18px 16px 16px;
+      min-width: 240px;
+      background: #fff;
+      grid-column: var(--col, auto) / span var(--col-span, 1);
+      grid-row: var(--row, auto) / span var(--row-span, 1);
+      z-index: 1;
+    }
+    .section-title {
+      position: absolute;
+      top: -18px;
+      left: 10px;
+      font-weight: bold;
+      color: var(--blue);
+      font-size: 14px;
+    }
+    .tables {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .table {
+      border: 1px solid #000;
+      background: #fff;
+      font-size: 11px;
+      line-height: 1.25;
+      min-width: 140px;
+    }
+    .table.pink { background: var(--pink); }
+    .table.aqua { background: var(--aqua); }
+    .table.yellow { background: var(--yellow); }
+    .table .header {
+      background: inherit;
+      border-bottom: 1px solid #000;
+      font-weight: bold;
+      padding: 3px 6px;
+    }
+    .table.pink .header { background: var(--pink); }
+    .table.aqua .header { background: var(--aqua); }
+    .table.yellow .header { background: var(--yellow); }
+    .table .body { padding: 6px; }
+    .rows { white-space: pre-line; }
+    .pk { font-weight: 700; text-decoration: underline; }
+    .fk { font-weight: 700; }
+    /* 区切り線は関係線と誤認されないように極薄の点線にする */
+    .conn {
+      position: relative;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+      background-image: repeating-linear-gradient(90deg, #e6eaf4 0 4px, transparent 4px 14px);
+    }
+    .conn-horizontal {
+      height: 1px;
+      align-self: center;
+      justify-self: stretch;
+      background-color: transparent;
+    }
+    .conn-vertical {
+      width: 1px;
+      justify-self: center;
+      align-self: stretch;
+      background-color: transparent;
+      background-image: repeating-linear-gradient(0deg, #e6eaf4 0 4px, transparent 4px 14px);
+    }
+
+    /* 関係線レイヤ（SVG） */
+    .canvas-wrapper { position: relative; }
+    .relations {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+      z-index: 2;
+    }
+    .rel {
+      fill: none;
+      stroke: #222;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      marker: none;
+      marker-end: none;
+      marker-start: none;
+    }
+    .rel-flow { stroke-width: 3; }
+    .rel-ref { stroke-dasharray: 6 4; opacity: 0.9; }
+    .rel-cross { stroke-width: 3.5; }
+    .rel-label {
+      font-size: 12px;
+      fill: #111;
+      paint-order: stroke;
+      stroke: #fff;
+      stroke-width: 4px;
+    }
+
     .legend {
-      width: 1180px;
-      margin: 0 auto 10px;
-      font-size: 13px;
-      color: var(--text-color);
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
     }
     .legend-item {
       display: inline-flex;
       align-items: center;
-      margin-right: 16px;
-    }
-    .legend-item:last-of-type { margin-right: 0; }
-    .legend-swatch {
-      width: 14px;
-      height: 14px;
-      border: 1px solid #999;
-      border-radius: 2px;
-      margin-right: 6px;
-    }
-    .grid {
-      position: relative;
-      width: 1180px;
-      min-height: 920px;
-      overflow-x: auto;
-      overflow-y: auto;
-    }
-    .lanes-layer {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--stair-step-y);
-      padding: 0;
-      margin: 0;
-    }
-    .lane {
-      position: relative;
-      border: var(--lane-border) solid var(--border);
-      background: var(--lane-bg);
-      color: var(--text-color);
-      padding: 6px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      height: auto;
-      min-height: fit-content;
-      width: auto;
-      margin-left: calc(var(--lane-index, 0) * var(--stair-step-x));
-      margin-top: 0;
-      min-width: min-content;
-    }
-    .lane::before,
-    .lane::after {
-      content: "";
-      position: absolute;
-      background: var(--border);
-      opacity: 0.8;
-    }
-    .lane:not(:last-child)::before {
-      left: 50%;
-      bottom: calc(-1 * var(--stair-step-y));
-      width: 2px;
-      height: var(--stair-step-y);
-      transform: translateX(-50%);
-    }
-    .lane:not(:last-child)::after {
-      left: 50%;
-      bottom: calc(-1 * var(--stair-step-y));
-      width: var(--stair-step-x);
-      height: 2px;
-      transform: translateX(-50%);
-    }
-    .lane-title {
-      display: block;
-      color: var(--border);
-      font-weight: 700;
-      font-size: 15px;
-      margin-bottom: 6px;
-    }
-    .lane-group {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
       gap: 6px;
+      padding: 4px 8px;
+      background: #fff;
+      border: 1px solid #dfe6ff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      white-space: nowrap;
     }
-    .card {
+    .legend-chip {
+      width: 18px;
+      height: 18px;
+      border: 1px solid #000;
+      box-sizing: border-box;
+    }
+    .legend-chip.pink { background: var(--pink); }
+    .legend-chip.aqua { background: var(--aqua); }
+    .legend-chip.yellow { background: var(--yellow); }
+    .legend-line {
       display: inline-flex;
       align-items: center;
-      padding: 6px 10px;
-      border-radius: 3px;
-      border: 1px solid var(--border);
-      font-size: 13px;
-      font-weight: 700;
-      margin: 4px 6px 4px 0;
-      color: #000;
-      white-space: normal;
-      line-height: 1.3;
-      word-break: keep-all;
-      max-width: calc(100% - 12px);
-      min-width: 64px;
+      gap: 6px;
+      padding: 4px 8px;
+      border: 1px solid #dfe6ff;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
-    .lane-group .card { display: flex; margin: 0; }
-    .card.type-master { background: #f8c9c9; }
-    .card.type-plan { background: #fff59d; }
-    .card.type-tx { background: #d5e9ff; }
+    .legend-line-swatch {
+      width: 34px;
+      height: 6px;
+      border-radius: 999px;
+    }
+    .legend-line-flow { background: #222; height: 8px; }
+    .legend-line-ref { background-image: linear-gradient(90deg, #222 50%, rgba(0,0,0,0) 0%); background-size: 10px 2px; background-repeat: repeat-x; }
+    .legend-line-cross { background: #222; height: 8px; border-width: 2px; border-style: solid; }
+    .legend-mult {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 10px;
+      background: #f5f6fb;
+      border: 1px solid #dfe6ff;
+      font-weight: 700;
+      font-size: 11px;
+    }
   </style>
 </head>
 <body>
-  <main aria-live="polite">
-    <div class="legend">
-      <span class="legend-item"><span class="legend-swatch" style="background: #f8c9c9; border-color: #4b77be;"></span>マスタ</span>
-      <span class="legend-item"><span class="legend-swatch" style="background: #fff59d; border-color: #4b77be;"></span>計画</span>
-      <span class="legend-item"><span class="legend-swatch" style="background: #d5e9ff; border-color: #4b77be;"></span>トランザクション</span>
-      <span class="legend-item"><span class="legend-swatch" style="background: #ffffff; border-color: #4b77be;"></span>レーン</span>
-      <span class="legend-item"><span class="legend-swatch" style="background: #ffffff; border-color: #4b77be;"></span>矢印/枠色（境界線）</span>
-    </div>
-    <div class="grid">
-      <div class="lanes-layer">
-        <section class="lane" style="--lane-index: 0; width: 160px; min-width: 160px; min-height: 220px;">
-          <span class="lane-title">人事システム</span>
-          <div class="lane-group">
-            <div class="card type-master" style="display:block;">組織</div>
-            <div class="card type-master" style="display:block;">従業員</div>
-            <div class="card type-tx" style="display:block;">異動</div>
-          </div>
-        </section>
-        <section class="lane" style="--lane-index: 1; width: 770px; min-width: 770px; min-height: 130px;">
-          <span class="lane-title">共通マスタシステム</span>
-          <div class="lane-group">
-            <div class="card type-master">企業</div>
-            <div class="card type-master">国</div>
-            <div class="card type-master">通貨</div>
-            <div class="card type-master">数量単位</div>
-          </div>
-        </section>
-        <section class="lane" style="--lane-index: 2; width: 770px; min-width: 770px; min-height: 170px;">
-          <span class="lane-title">SCMシステム</span>
-          <div class="lane-group">
-            <div class="card type-master">品目カテゴリ</div>
-            <div class="card type-master">SCM品目</div>
-            <div class="card type-master">SCM拠点</div>
-          </div>
-          <div class="lane-group">
-            <div class="card type-tx" style="display:block; margin-top: 12px;">統合在庫</div>
-          </div>
-        </section>
-        <section class="lane" style="--lane-index: 3; width: 280px; min-width: 280px; min-height: 330px;">
-          <span class="lane-title">購買システム</span>
-          <div class="lane-group">
-            <div class="card type-master">仕入先</div>
-            <div class="card type-master">購買品目</div>
-            <div class="card type-master">購買拠点</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-plan">購買計画</div>
-            <div class="card type-plan">購買実績</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-tx">発注</div>
-            <div class="card type-tx" style="display:block; margin-top: 14px;">入荷</div>
-            <div class="card type-plan" style="display:block; margin-top: 14px; margin-left: 110px;">支払</div>
-          </div>
-        </section>
-        <section class="lane" style="--lane-index: 4; width: 260px; min-width: 260px; min-height: 330px;">
-          <span class="lane-title">生産システム</span>
-          <div class="lane-group">
-            <div class="card type-master">生産品目</div>
-            <div class="card type-master">生産拠点</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-plan">生産計画</div>
-            <div class="card type-plan">生産実績</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-tx" style="display:block;">生産</div>
-          </div>
-        </section>
-        <section class="lane" style="--lane-index: 5; width: 260px; min-width: 260px; min-height: 330px;">
-          <span class="lane-title">販売システム</span>
-          <div class="lane-group">
-            <div class="card type-master">顧客</div>
-            <div class="card type-master">販売品目</div>
-            <div class="card type-master">物流拠点</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-plan">販売計画</div>
-            <div class="card type-plan">販売実績</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-tx" style="display:block;">受注</div>
-            <div class="card type-tx" style="display:block; margin-top: 14px;">出荷（売上）</div>
-            <div class="card type-tx" style="display:block; margin-top: 14px;">請求</div>
-            <div class="card type-tx" style="display:block; margin-top: 14px;">入金</div>
-          </div>
-        </section>
-        <section class="lane" style="--lane-index: 6; width: 240px; min-width: 240px; min-height: 330px;">
-          <span class="lane-title">会計システム</span>
-          <div class="lane-group">
-            <div class="card type-master">相手先</div>
-            <div class="card type-master">勘定科目</div>
-          </div>
-          <div class="lane-group" style="margin-top: 12px;">
-            <div class="card type-plan">BS/PL</div>
-            <div class="card type-plan" style="display:block; margin-top: 80px;">仕訳</div>
-          </div>
-        </section>
+  <div class="page">
+    <div class="page-header">
+      <h1 class="page-title">{{page.title}}</h1>
+      <div class="legend">
+        {{#page.legend}}
+        <div class="legend-item">
+          <span class="legend-chip {{color}}"></span>
+          <span>{{label}}</span>
+        </div>
+        {{/page.legend}}
+        <div class="legend-line">
+          <span class="legend-line-swatch legend-line-flow"></span><span>主要業務フロー</span>
+        </div>
+        <div class="legend-line">
+          <span class="legend-line-swatch legend-line-ref"></span><span>マスタ参照</span>
+        </div>
+        <div class="legend-line">
+          <span class="legend-line-swatch legend-line-cross"></span><span>システム跨ぎ強調</span>
+        </div>
+        <div class="legend-line">
+          <span class="legend-mult">1 / N / 0..1</span><span>多重度</span>
+        </div>
       </div>
     </div>
-  </main>
+    <div class="canvas-wrapper">
+      <!-- BEGIN AUTO-RELATIONS -->
+<svg class="relations" viewBox="0 0 1360 900" preserveAspectRatio="none" aria-hidden="true">
+  <path class="rel rel-flow" d="M 50 165 L 50 137 L 50 137 L 50 165"></path>
+</svg>
+<!-- END AUTO-RELATIONS -->
+      <div class="canvas">
+
+        {{#sections}}
+        <div class="section" id="{{id}}" style="--row: {{grid.row}}; --col: {{grid.column}}; --col-span: {{grid.column_span}}; --row-span: {{grid.row_span}};">
+          <div class="section-title">{{name}}</div>
+          <div class="tables">
+            {{#tables}}
+            <div class="table {{color}}" id="E-{{id}}" data-entity-id="{{id}}" data-system="{{system}}">
+              <div class="header">{{name}}</div>
+              <div class="body rows">{{#fields}}{{.}}&#10;{{/fields}}</div>
+            </div>
+            {{/tables}}
+          </div>
+        </div>
+        {{/sections}}
+
+      </div>
+    </div>
+  </div>
 </body>
 </html>

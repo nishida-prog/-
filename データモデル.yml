@@ -1,257 +1,372 @@
-meta:
-  title: "鳥瞰データモデル（業務横断）"
+page:
+  title: 鳥瞰データモデル図
+  legend:
+    - color: pink
+      label: "ピンク: マスタ系"
+    - color: yellow
+      label: "イエロー: 計画・指図・計上系"
+    - color: aqua
+      label: "水色: 取引・在庫・明細系"
 
-styles:
-  font_family: "\"Hiragino Sans\", \"Noto Sans JP\", sans-serif"
-  colors:
-    border: "#4b77be"
-    lane_bg: "#ffffff"
-    body_bg: "#ffffff"
-    text: "#0d0d0d"
-  lane_border: 3
-  types:
-    - key: master
-      label: "マスタ"
-      color: "#f8c9c9"
-    - key: plan
-      label: "計画"
-      color: "#fff59d"
-    - key: tx
-      label: "トランザクション"
-      color: "#d5e9ff"
+grid:
+  columns: 4
+  gap: 1.6cm
 
-layout:
+connectors:
+  - name: masters_top
+    orientation: horizontal
+    row: 1
+    column_start: 1
+    column_span: 4
+  - name: top_to_bottom_col1
+    orientation: vertical
+    column: 1
+    row_start: 1
+    row_span: 2
+  - name: top_to_bottom_col2
+    orientation: vertical
+    column: 2
+    row_start: 1
+    row_span: 2
+  - name: top_to_bottom_col3
+    orientation: vertical
+    column: 3
+    row_start: 1
+    row_span: 2
+  - name: top_to_bottom_col4
+    orientation: vertical
+    column: 4
+    row_start: 1
+    row_span: 2
+  - name: operations_bottom
+    orientation: horizontal
+    row: 2
+    column_start: 1
+    column_span: 4
+
+sections:
+  - id: section-human
+    name: 人事システム
+    grid:
+      row: 1
+      column: 1
+      column_span: 1
+      row_span: 1
+    tables:
+      - id: human-org
+        system: human
+        name: 組織
+        color: pink
+        fields: []
+      - id: human-employee
+        system: human
+        name: 従業員
+        color: pink
+        fields: []
+      - id: human-transfer
+        system: human
+        name: 異動
+        color: aqua
+        fields: []
+
+  - id: section-common
+    name: 共通マスタシステム
+    grid:
+      row: 1
+      column: 2
+      column_span: 2
+      row_span: 1
+    tables:
+      - id: master-company
+        system: common
+        name: 企業
+        color: pink
+        fields: []
+      - id: master-country
+        system: common
+        name: 国
+        color: pink
+        fields: []
+      - id: master-currency
+        system: common
+        name: 通貨
+        color: pink
+        fields: []
+      - id: master-uom
+        system: common
+        name: 数量単位
+        color: pink
+        fields: []
+
+  - id: section-scm
+    name: SCMシステム
+    grid:
+      row: 1
+      column: 4
+      column_span: 1
+      row_span: 1
+    tables:
+      - id: scm-item-category
+        system: scm
+        name: 品目カテゴリ
+        color: pink
+        fields: []
+      - id: scm-item
+        system: scm
+        name: SCM品目
+        color: pink
+        fields: []
+      - id: scm-site
+        system: scm
+        name: SCM拠点
+        color: pink
+        fields: []
+      - id: scm-stock
+        system: scm
+        name: 統合在庫
+        color: aqua
+        fields: []
+
+  - id: section-purchase
+    name: 購買システム
+    grid:
+      row: 2
+      column: 1
+      column_span: 1
+      row_span: 1
+    tables:
+      - id: purchase-supplier
+        system: purchase
+        name: 仕入先
+        color: pink
+        fields: []
+      - id: purchase-item
+        system: purchase
+        name: 購買品目
+        color: pink
+        fields: []
+      - id: purchase-site
+        system: purchase
+        name: 購買拠点
+        color: pink
+        fields: []
+      - id: purchase-plan
+        system: purchase
+        name: 購買計画
+        color: yellow
+        fields: []
+      - id: purchase-result
+        system: purchase
+        name: 購買実績
+        color: yellow
+        fields: []
+      - id: purchase-order
+        system: purchase
+        name: 発注
+        color: aqua
+        fields: []
+      - id: purchase-receipt
+        system: purchase
+        name: 入荷
+        color: aqua
+        fields: []
+      - id: purchase-payment
+        system: purchase
+        name: 支払
+        color: aqua
+        fields: []
+
+  - id: section-production
+    name: 生産システム
+    grid:
+      row: 2
+      column: 2
+      column_span: 1
+      row_span: 1
+    tables:
+      - id: prod-item
+        system: production
+        name: 生産品目
+        color: pink
+        fields: []
+      - id: prod-site
+        system: production
+        name: 生産拠点
+        color: pink
+        fields: []
+      - id: prod-plan
+        system: production
+        name: 生産計画
+        color: yellow
+        fields: []
+      - id: prod-result
+        system: production
+        name: 生産実績
+        color: yellow
+        fields: []
+      - id: prod-exec
+        system: production
+        name: 生産
+        color: aqua
+        fields: []
+
+  - id: section-sales
+    name: 販売システム
+    grid:
+      row: 2
+      column: 3
+      column_span: 1
+      row_span: 1
+    tables:
+      - id: sales-customer
+        system: sales
+        name: 顧客
+        color: pink
+        fields: []
+      - id: sales-item
+        system: sales
+        name: 販売品目
+        color: pink
+        fields: []
+      - id: sales-logistics-site
+        system: sales
+        name: 物流拠点
+        color: pink
+        fields: []
+      - id: sales-plan
+        system: sales
+        name: 販売計画
+        color: yellow
+        fields: []
+      - id: sales-result
+        system: sales
+        name: 販売実績
+        color: yellow
+        fields: []
+      - id: sales-order
+        system: sales
+        name: 受注
+        color: aqua
+        fields: []
+      - id: sales-shipment
+        system: sales
+        name: 出荷（売上）
+        color: aqua
+        fields: []
+      - id: sales-invoice
+        system: sales
+        name: 請求
+        color: aqua
+        fields: []
+      - id: sales-cash
+        system: sales
+        name: 入金
+        color: aqua
+        fields: []
+
+  - id: section-accounting
+    name: 会計システム
+    grid:
+      row: 2
+      column: 4
+      column_span: 1
+      row_span: 1
+    tables:
+      - id: acct-counterparty
+        system: accounting
+        name: お客様
+        color: pink
+        fields: []
+      - id: acct-account
+        system: accounting
+        name: 勘定科目
+        color: pink
+        fields: []
+      - id: acct-bspl
+        system: accounting
+        name: BS/PL
+        color: yellow
+        fields: []
+      - id: acct-journal
+        system: accounting
+        name: 仕訳
+        color: aqua
+        fields: []
+
+# 鳥瞰データモデル用の主要エンティティ／関係（生成時にSVG座標を計算）
+birdseye:
+  viewbox:
+    width: 1360
+    height: 900
+  routing:
+    # 線がテーブルに重ならないよう、同一行/列の線はこのオフセットで迂回します
+    offset: 28
   grid:
-    width: 1180
-    height: 920
+    # sections/grid と同じ前提で近似座標を算出
+    padding: 20
+    cell_width: 300
+    cell_height: 360
+    gap_x: 40
+    gap_y: 140
+    tables_per_row: 3
+    table_gap_x: 120
+    table_gap_y: 70
+  entities:
+    - id: human_org
+      label: "組織"
+      ref: human-org
+    - id: sales_customer
+      label: "顧客"
+      ref: sales-customer
+    - id: sales_order
+      label: "受注"
+      ref: sales-order
+    - id: sales_shipment
+      label: "出荷（売上）"
+      ref: sales-shipment
+    - id: sales_invoice
+      label: "請求"
+      ref: sales-invoice
+    - id: sales_payment
+      label: "入金"
+      ref: sales-cash
 
-legend:
-  items:
-    - key: master
-      label: "マスタ"
-      color: "#f8c9c9"
-      border: "#4b77be"
-    - key: plan
-      label: "計画"
-      color: "#fff59d"
-      border: "#4b77be"
-    - key: tx
-      label: "トランザクション"
-      color: "#d5e9ff"
-      border: "#4b77be"
-    - key: lane
-      label: "レーン"
-      color: "#ffffff"
-      border: "#4b77be"
-    - key: border
-      label: "矢印/枠色（境界線）"
-      color: "#ffffff"
-      border: "#4b77be"
+    - id: purchase_supplier
+      label: "仕入先"
+      ref: purchase-supplier
+    - id: purchase_order
+      label: "発注"
+      ref: purchase-order
+    - id: purchase_receipt
+      label: "入荷"
+      ref: purchase-receipt
+    - id: purchase_payment
+      label: "支払"
+      ref: purchase-payment
 
-arrows:
-  - id: hr_to_common
-    path: "M170 130 L208 130"
-  - id: common_to_scm
-    path: "M593 150 L593 278"
-  - id: scm_to_purchase
-    path: "M593 448 L593 470 L150 470 L150 486"
-  - id: purchase_to_production
-    path: "M290 651 L328 651"
-  - id: production_to_sales
-    path: "M588 651 L626 651"
-  - id: sales_to_accounting
-    path: "M886 651 L924 651"
+    - id: scm_item
+      label: "SCM品目"
+      ref: scm-item
+    - id: inventory
+      label: "統合在庫"
+      ref: scm-stock
 
-connections:
-  - from: hr
-    to: common_master
-  - from: common_master
-    to: scm
-  - from: scm
-    to: purchase
-  - from: purchase
-    to: production
-  - from: production
-    to: sales
-  - from: sales
-    to: accounting
+    - id: sales_item
+      label: "販売品目"
+      ref: sales-item
+    - id: purchase_item
+      label: "購買品目"
+      ref: purchase-item
+    - id: production_item
+      label: "生産品目"
+      ref: prod-item
 
-lanes:
-  - id: hr
-    label: "人事システム"
-    lane_index: 0
-    x: 10
-    y: 20
-    width: 160
-    height: 220
-    groups:
-      - items:
-          - label: "組織"
-            type: master
-            block: true
-          - label: "従業員"
-            type: master
-            block: true
-          - label: "異動"
-            type: tx
-            block: true
+    - id: accounting_journal
+      label: "仕訳"
+      ref: acct-journal
 
-  - id: common_master
-    label: "共通マスタシステム"
-    lane_index: 1
-    x: 208
-    y: 20
-    width: 770
-    height: 130
-    groups:
-      - items:
-          - label: "企業"
-            type: master
-          - label: "国"
-            type: master
-          - label: "通貨"
-            type: master
-          - label: "数量単位"
-            type: master
-
-  - id: scm
-    label: "SCMシステム"
-    lane_index: 2
-    x: 208
-    y: 278
-    width: 770
-    height: 170
-    groups:
-      - items:
-          - label: "品目カテゴリ"
-            type: master
-          - label: "SCM品目"
-            type: master
-          - label: "SCM拠点"
-            type: master
-      - items:
-          - label: "統合在庫"
-            type: tx
-            block: true
-            marginTop: 12
-
-  - id: purchase
-    label: "購買システム"
-    lane_index: 3
-    x: 10
-    y: 486
-    width: 280
-    height: 330
-    groups:
-      - items:
-          - label: "仕入先"
-            type: master
-          - label: "購買品目"
-            type: master
-          - label: "購買拠点"
-            type: master
-      - marginTop: 12
-        items:
-          - label: "購買計画"
-            type: plan
-          - label: "購買実績"
-            type: plan
-      - marginTop: 12
-        items:
-          - label: "発注"
-            type: tx
-          - label: "入荷"
-            type: tx
-            block: true
-            marginTop: 14
-          - label: "支払"
-            type: plan
-            block: true
-            marginTop: 14
-            marginLeft: 110
-
-  - id: production
-    label: "生産システム"
-    lane_index: 4
-    x: 328
-    y: 486
-    width: 260
-    height: 330
-    groups:
-      - items:
-          - label: "生産品目"
-            type: master
-          - label: "生産拠点"
-            type: master
-      - marginTop: 12
-        items:
-          - label: "生産計画"
-            type: plan
-          - label: "生産実績"
-            type: plan
-      - marginTop: 12
-        items:
-          - label: "生産"
-            type: tx
-            block: true
-
-  - id: sales
-    label: "販売システム"
-    lane_index: 5
-    x: 626
-    y: 486
-    width: 260
-    height: 330
-    groups:
-      - items:
-          - label: "顧客"
-            type: master
-          - label: "販売品目"
-            type: master
-          - label: "物流拠点"
-            type: master
-      - marginTop: 12
-        items:
-          - label: "販売計画"
-            type: plan
-          - label: "販売実績"
-            type: plan
-      - marginTop: 12
-        items:
-          - label: "受注"
-            type: tx
-            block: true
-          - label: "出荷（売上）"
-            type: tx
-            block: true
-            marginTop: 14
-          - label: "請求"
-            type: tx
-            block: true
-            marginTop: 14
-          - label: "入金"
-            type: tx
-            block: true
-            marginTop: 14
-
-  - id: accounting
-    label: "会計システム"
-    lane_index: 6
-    x: 924
-    y: 486
-    width: 240
-    height: 330
-    groups:
-      - items:
-          - label: "相手先"
-            type: master
-          - label: "勘定科目"
-            type: master
-      - marginTop: 12
-        items:
-          - label: "BS/PL"
-            type: plan
-          - label: "仕訳"
-            type: plan
-            block: true
-            marginTop: 80
+  # 組織（Organization）内のみ矢印を描画（親子の自己参照）
+  relations:
+    - from: human_org
+      to: human_org
+      kind: flow

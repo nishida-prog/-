@@ -1,0 +1,31 @@
+meta:
+  is_invoice: false
+  is_quotation: true
+  is_delivery: false
+  issue_date: "2025-11-08" # スキーマのサンプルに準拠
+  slip_no: "QT-20251108-002" # スキーマのサンプルに準拠
+  subject: "BtoBシステム全体最適化 PM伴走支援 お見積書"
+customer: # 提供された内容に顧客情報がないため、スキーマのサンプルを使用
+  postal: "101-0041"
+  address_line1: "東京都千代田区神田須田町1-12-3"
+  address_line2: "アルカティアビル9階"
+  company: "株式会社サンプル"
+  attention: "ご担当者様"
+seller:
+  name: "株式会社ファンリピート"
+  postal: "XXX-XXXX" # 提供されたテキストに具体的な郵便番号がないため、そのまま
+  address: "東京都渋谷区..." # 提供されたテキストに具体的な住所がないため、そのまま
+  tel: "XX-XXXX-XXXX" # 提供されたテキストに具体的な電話番号がないため、そのまま
+  email: "info@funrepeat.co.jp"
+  logo_url: "https://funrepeat.com/wp-content/uploads/2025/03/funrepeat_logo_1200_190.png"
+payment: # 提供された内容に支払い情報がないため、スキーマのサンプルを使用
+  bank: "ＧＭＯあおぞらネット銀行"
+  branch: "法人第二営業部"
+  account_type: "普通"
+  account_no: "1113359"
+  due_date: "2025-12-31" # 契約開始月に合わせて設定
+amount_box:
+  quotation_label: "ご提示金額"
+  invoice_label: "ご請求金額"
+  delivery_label: "合計金額"
+items:
