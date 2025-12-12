@@ -315,58 +315,189 @@ birdseye:
     - id: human_org
       label: "組織"
       ref: human-org
+      pos: { x: 90, y: 110 }
     - id: sales_customer
       label: "顧客"
       ref: sales-customer
+      pos: { x: 740, y: 560 }
     - id: sales_order
       label: "受注"
       ref: sales-order
+      pos: { x: 750, y: 720 }
     - id: sales_shipment
       label: "出荷（売上）"
       ref: sales-shipment
+      pos: { x: 850, y: 830 }
     - id: sales_invoice
       label: "請求"
       ref: sales-invoice
+      pos: { x: 930, y: 720 }
     - id: sales_payment
       label: "入金"
       ref: sales-cash
+      pos: { x: 990, y: 760 }
 
     - id: purchase_supplier
       label: "仕入先"
       ref: purchase-supplier
+      pos: { x: 70, y: 560 }
     - id: purchase_order
       label: "発注"
       ref: purchase-order
+      pos: { x: 70, y: 810 }
     - id: purchase_receipt
       label: "入荷"
       ref: purchase-receipt
+      pos: { x: 160, y: 840 }
     - id: purchase_payment
       label: "支払"
       ref: purchase-payment
+      pos: { x: 250, y: 720 }
 
     - id: scm_item
       label: "SCM品目"
       ref: scm-item
+      pos: { x: 1180, y: 120 }
     - id: inventory
       label: "統合在庫"
       ref: scm-stock
+      pos: { x: 1150, y: 300 }
 
     - id: sales_item
       label: "販売品目"
       ref: sales-item
+      pos: { x: 840, y: 560 }
     - id: purchase_item
       label: "購買品目"
       ref: purchase-item
+      pos: { x: 160, y: 560 }
     - id: production_item
       label: "生産品目"
       ref: prod-item
+      pos: { x: 420, y: 560 }
 
     - id: accounting_journal
       label: "仕訳"
       ref: acct-journal
+      pos: { x: 1140, y: 840 }
 
   # 組織（Organization）内のみ矢印を描画（親子の自己参照）
   relations:
     - from: human_org
       to: human_org
       kind: flow
+      via:
+        - { x: 150, y: 110 }
+        - { x: 150, y: 70 }
+        - { x: 90, y: 70 }
+    - from: scm_item
+      to: purchase_item
+      kind: ref
+      via:
+        - { x: 1170, y: 120 }
+        - { x: 1170, y: 260 }
+        - { x: 160, y: 260 }
+    - from: scm_item
+      to: production_item
+      kind: ref
+      via:
+        - { x: 1180, y: 275 }
+        - { x: 420, y: 275 }
+    - from: scm_item
+      to: sales_item
+      kind: ref
+      via:
+        - { x: 1190, y: 120 }
+        - { x: 1190, y: 290 }
+        - { x: 840, y: 290 }
+    - from: purchase_supplier
+      to: purchase_order
+      kind: ref
+      via:
+        - { x: 55, y: 560 }
+        - { x: 55, y: 810 }
+    - from: purchase_order
+      to: purchase_receipt
+      kind: flow
+      via:
+        - { x: 150, y: 810 }
+        - { x: 150, y: 840 }
+    - from: purchase_receipt
+      to: purchase_payment
+      kind: flow
+      via:
+        - { x: 160, y: 760 }
+        - { x: 250, y: 760 }
+    - from: purchase_receipt
+      to: inventory
+      kind: cross
+      via:
+        - { x: 340, y: 840 }
+        - { x: 340, y: 500 }
+        - { x: 1120, y: 500 }
+        - { x: 1120, y: 300 }
+    - from: sales_customer
+      to: sales_order
+      kind: ref
+      via:
+        - { x: 720, y: 560 }
+        - { x: 720, y: 720 }
+    - from: sales_item
+      to: sales_order
+      kind: ref
+      via:
+        - { x: 800, y: 560 }
+        - { x: 800, y: 720 }
+    - from: sales_order
+      to: sales_shipment
+      kind: flow
+      via:
+        - { x: 750, y: 800 }
+        - { x: 840, y: 800 }
+        - { x: 840, y: 830 }
+    - from: sales_shipment
+      to: sales_invoice
+      kind: flow
+      via:
+        - { x: 850, y: 780 }
+        - { x: 920, y: 780 }
+        - { x: 920, y: 720 }
+    - from: sales_invoice
+      to: sales_payment
+      kind: flow
+      via:
+        - { x: 990, y: 720 }
+    - from: sales_shipment
+      to: inventory
+      kind: cross
+      via:
+        - { x: 1020, y: 830 }
+        - { x: 1020, y: 510 }
+        - { x: 1090, y: 510 }
+        - { x: 1090, y: 320 }
+        - { x: 1150, y: 320 }
+    - from: sales_invoice
+      to: accounting_journal
+      kind: cross
+      via:
+        - { x: 930, y: 740 }
+        - { x: 1008, y: 740 }
+        - { x: 1008, y: 820 }
+        - { x: 1120, y: 820 }
+        - { x: 1120, y: 840 }
+    - from: sales_payment
+      to: accounting_journal
+      kind: cross
+      via:
+        - { x: 990, y: 870 }
+        - { x: 1140, y: 870 }
+    - from: purchase_payment
+      to: accounting_journal
+      kind: cross
+      via:
+        - { x: 352, y: 720 }
+        - { x: 352, y: 480 }
+        - { x: 1100, y: 480 }
+        - { x: 1100, y: 865 }
+        - { x: 1160, y: 865 }
+        - { x: 1160, y: 840 }

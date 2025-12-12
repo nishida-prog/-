@@ -13,6 +13,9 @@
       --line: #000;
       --line-thickness: 3px;
       --gap: 40px;
+      /* 固定キャンバス（鳥瞰図用の資料サイズ） */
+      --canvas-width: 1360px;
+      --canvas-height: 900px;
       --font: "MS UI Gothic", "Yu Gothic", "Hiragino Sans", "Meiryo", sans-serif;
     }
     * { box-sizing: border-box; }
@@ -22,10 +25,11 @@
       display: block;
       padding: 20px;
       font-family: var(--font);
+      overflow: auto;
     }
     .page {
-      width: 1360px;
-      max-width: 1360px;
+      width: var(--canvas-width);
+      max-width: var(--canvas-width);
       margin: 0;
     }
     .page-header {
@@ -41,19 +45,22 @@
       color: #0f2b8f;
     }
     .canvas-wrapper {
-      width: 1360px;
+      width: var(--canvas-width);
+      height: var(--canvas-height);
       border: 1px solid #dfe6ff;
       background: #fff;
       box-shadow: 0 16px 32px rgba(0,0,0,0.08);
       padding: 20px;
       position: relative;
       margin: 0;
+      overflow: hidden;
     }
     .canvas {
       display: grid;
       grid-template-columns: repeat({{grid.columns}}, 300px);
       gap: {{grid.gap}};
-      width: 1360px;
+      width: var(--canvas-width);
+      height: var(--canvas-height);
       position: relative;
       z-index: 1;
     }
@@ -214,6 +221,16 @@
       font-weight: 700;
       font-size: 11px;
     }
+
+    /* 印刷（A4横） */
+    @page {
+      size: A4 landscape;
+      margin: 10mm;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .canvas-wrapper { box-shadow: none; border: 0; }
+    }
   </style>
 </head>
 <body>
@@ -243,9 +260,7 @@
     </div>
     <div class="canvas-wrapper">
       <!-- BEGIN AUTO-RELATIONS -->
-<svg class="relations" viewBox="0 0 1360 900" preserveAspectRatio="none" aria-hidden="true">
-  <path class="rel rel-flow" d="M 50 165 L 50 137 L 50 137 L 50 165"></path>
-</svg>
+<svg class="relations" viewBox="0 0 1360 900" preserveAspectRatio="none" aria-hidden="true"></svg>
 <!-- END AUTO-RELATIONS -->
       <div class="canvas">
 

@@ -1,0 +1,10 @@
+{
+  "name": "birdseye-data-modeling",
+  "private": true,
+  "description": "Generate embedded SVG relations for fixed-canvas ER birdseye diagram.",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "yaml": "^2.4.5"
+  }
+}
+
