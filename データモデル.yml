@@ -316,6 +316,14 @@ birdseye:
       label: "組織"
       ref: human-org
       pos: { x: 90, y: 110 }
+    - id: human_employee
+      label: "従業員"
+      ref: human-employee
+      pos: { x: 90, y: 220 }
+    - id: human_transfer
+      label: "異動"
+      ref: human-transfer
+      pos: { x: 90, y: 330 }
     - id: sales_customer
       label: "顧客"
       ref: sales-customer
@@ -390,6 +398,16 @@ birdseye:
         - { x: 150, y: 110 }
         - { x: 150, y: 70 }
         - { x: 90, y: 70 }
+    - from: human_org
+      to: human_employee
+      kind: ref
+      via:
+        - { x: 90, y: 165 }
+    - from: human_employee
+      to: human_transfer
+      kind: flow
+      via:
+        - { x: 90, y: 275 }
     - from: scm_item
       to: purchase_item
       kind: ref
