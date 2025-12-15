@@ -151,7 +151,7 @@
 
       {{#computed.tables}}
       <div class="table {{color}}" id="E-{{id}}" style="left: {{x}}px; top: {{y}}px; width: {{w}}px; height: {{h}}px;">
-        <div class="header">{{name}}</div>
+        <div class="header">{{name}}{{^name}}{{id}}{{/name}}</div>
       </div>
       {{/computed.tables}}
     </div>
