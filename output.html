@@ -48,6 +48,48 @@
       font-size: 12px;
       opacity: 0.85;
     }
+    .legend {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      font-size: 12px;
+      opacity: 0.95;
+    }
+    .legend-items {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 6px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid #dfe6ff;
+      padding: 4px 8px;
+      border-radius: 999px;
+    }
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      border: 1px solid rgba(0,0,0,0.25);
+      background: var(--swatch, #fff);
+    }
+    .legend-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+      gap: 2px;
+    }
+    .legend-desc {
+      font-size: 11px;
+      opacity: 0.8;
+      white-space: nowrap;
+    }
 
     .canvas-wrapper {
       width: var(--canvas-width);
@@ -125,11 +167,26 @@
   </style>
 </head>
 <body>
-  <div class="page">
-    <div class="page-header">
-      <h1 class="page-title">{{page.title}}</h1>
-      <div class="note">{{page.legendNote}}</div>
-    </div>
+    <div class="page">
+      <div class="page-header">
+        <h1 class="page-title">{{page.title}}</h1>
+        <div class="legend">
+          {{#page.legend}}
+          <div class="legend-items">
+            {{#items}}
+            <div class="legend-item">
+              <span class="legend-swatch" style="--swatch: {{swatch}};"></span>
+              <span class="legend-text">
+                <span>{{label}}</span>
+                {{#description}}<span class="legend-desc">{{description}}</span>{{/description}}
+              </span>
+            </div>
+            {{/items}}
+          </div>
+          {{/page.legend}}
+          {{#page.legendNote}}<div class="note">{{page.legendNote}}</div>{{/page.legendNote}}
+        </div>
+      </div>
 
     <div class="canvas-wrapper">
       <svg class="relations" viewBox="0 0 {{computed.canvas.width}} {{computed.canvas.height}}" preserveAspectRatio="none" aria-hidden="true">

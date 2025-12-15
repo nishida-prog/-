@@ -3,6 +3,17 @@ schemaVersion: 1
 page:
   title: 概要データモデリング図
   legendNote: 各システム最大3エンティティ・主要リレーションのみ
+  legend:
+    items:
+      - label: マスタ
+        description: 参照・定義系（不変/更新頻度低）
+        swatch: "var(--pink)"
+      - label: 取引
+        description: 注文・出荷などの主要フロー
+        swatch: "var(--yellow)"
+      - label: 明細
+        description: 明細・履歴などの付随データ
+        swatch: "var(--aqua)"
 
 style:
   bg: "#f7f9ff"

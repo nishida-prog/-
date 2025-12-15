@@ -24,3 +24,4 @@ node tools/generate-relations.js
 
 ## 注意
 - ブラウザ側のJSは使わず、生成時に静的HTMLへ焼き込む方式です。
+- 凡例（色の説明）は `データモデル.yml` の `page.legend.items` で管理します（`label` / `swatch` / `description`、`description` は任意）。
