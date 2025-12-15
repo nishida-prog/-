@@ -1,31 +1,443 @@
-meta:
-  is_invoice: false
-  is_quotation: true
-  is_delivery: false
-  issue_date: "2025-11-08" # スキーマのサンプルに準拠
-  slip_no: "QT-20251108-002" # スキーマのサンプルに準拠
-  subject: "BtoBシステム全体最適化 PM伴走支援 お見積書"
-customer: # 提供された内容に顧客情報がないため、スキーマのサンプルを使用
-  postal: "101-0041"
-  address_line1: "東京都千代田区神田須田町1-12-3"
-  address_line2: "アルカティアビル9階"
-  company: "株式会社サンプル"
-  attention: "ご担当者様"
-seller:
-  name: "株式会社ファンリピート"
-  postal: "XXX-XXXX" # 提供されたテキストに具体的な郵便番号がないため、そのまま
-  address: "東京都渋谷区..." # 提供されたテキストに具体的な住所がないため、そのまま
-  tel: "XX-XXXX-XXXX" # 提供されたテキストに具体的な電話番号がないため、そのまま
-  email: "info@funrepeat.co.jp"
-  logo_url: "https://funrepeat.com/wp-content/uploads/2025/03/funrepeat_logo_1200_190.png"
-payment: # 提供された内容に支払い情報がないため、スキーマのサンプルを使用
-  bank: "ＧＭＯあおぞらネット銀行"
-  branch: "法人第二営業部"
-  account_type: "普通"
-  account_no: "1113359"
-  due_date: "2025-12-31" # 契約開始月に合わせて設定
-amount_box:
-  quotation_label: "ご提示金額"
-  invoice_label: "ご請求金額"
-  delivery_label: "合計金額"
-items:
+schemaVersion: 1
+
+page:
+  title: 概要データモデリング図
+  # テンプレ右下に表示する補足（不要なら削除/空にする）
+  legendNote: 各システム最大3エンティティ・主要リレーションのみ
+
+style:
+  # テンプレのCSS変数へ流し込む値
+  bg: "#f7f9ff"
+  nodeBg: "#ffffff"
+  nodeBorder: "#1b3dff"
+  headerBg: "#eef2ff"
+  text: "#0b1020"
+  line: "#000000"
+  lineWidth: 2.5
+  pink: "#e8c9d8"
+  aqua: "#c7f3ff"
+  yellow: "#ffeeb9"
+  tableWidth: "170px"
+  canvasPadding: "20px"
+
+layout:
+  # 自動レイアウトの入力（座標は持たない）
+  columns: 4
+  columnGapPx: 76
+  rowGapPx: 96
+  sectionPaddingPx:
+    top: 18
+    right: 12
+    bottom: 12
+    left: 12
+  tableSpacingPx: 14
+  tableHeaderHeightPx: 22
+  tableLineHeightPx: 14
+  tableBodyPaddingPx: 6
+  # 配線（縦バス）ルール
+  laneStepPx: 14
+  busLanes: 3
+  minGapMm: 3.0
+  allowCrossing: true
+
+sections:
+  - id: section-human
+    name: 人事システム
+    order: 1
+  - id: section-common
+    name: 共通マスタシステム
+    order: 2
+  - id: section-sales
+    name: 販売システム
+    order: 3
+  - id: section-accounting
+    name: 会計システム
+    order: 4
+  - id: section-purchase
+    name: 購買システム
+    order: 5
+  - id: section-production
+    name: 生産システム
+    order: 6
+  - id: section-scm
+    name: SCMシステム
+    order: 7
+
+tables:
+  - id: human-org
+    sectionId: section-human
+    order: 1
+    name: 組織
+    color: pink
+    fields: [組織cd]
+  - id: human-employee
+    sectionId: section-human
+    order: 2
+    name: 社員（社員数）
+    color: aqua
+    fields: [社員cd, 氏名, 資格, 職能, 等級]
+  - id: human-transfer
+    sectionId: section-human
+    order: 3
+    name: 異動
+    color: aqua
+    fields: [異動id, 社員cd, 日付]
+
+  - id: common-company
+    sectionId: section-common
+    order: 1
+    name: 企業
+    color: pink
+    fields: [企業cd, 名称, 住所]
+  - id: common-bank
+    sectionId: section-common
+    order: 2
+    name: 銀行
+    color: pink
+    fields: [銀行cd]
+  - id: common-branch
+    sectionId: section-common
+    order: 3
+    name: 支店
+    color: pink
+    fields: [支店cd]
+
+  - id: scm-part
+    sectionId: section-scm
+    order: 1
+    name: 部品
+    color: pink
+    fields: [部品cd]
+
+  - id: purchase-supplier
+    sectionId: section-purchase
+    order: 1
+    name: 仕入先
+    color: pink
+    fields: [仕入先cd, 企業cd, 支払条件]
+  - id: purchase-item
+    sectionId: section-purchase
+    order: 2
+    name: 購買品目
+    color: pink
+    fields: [品目id]
+  - id: purchase-po
+    sectionId: section-purchase
+    order: 3
+    name: 購買発注
+    color: yellow
+    fields: [発注id, 仕入先cd, 品目id, 数量]
+
+  - id: production-sale-item
+    sectionId: section-production
+    order: 1
+    name: 販売（納入）品目
+    color: pink
+    fields: [品目id]
+  - id: production-stock
+    sectionId: section-production
+    order: 2
+    name: 在庫
+    color: aqua
+    fields: [在庫id, 品目, 数量, ロケ]
+  - id: production-stock-detail
+    sectionId: section-production
+    order: 3
+    name: 在庫明細
+    color: aqua
+    fields: [明細id, 在庫id, 入出庫履歴]
+
+  - id: sales-customer
+    sectionId: section-sales
+    order: 1
+    name: 得意先
+    color: pink
+    fields: [得意先cd]
+  - id: sales-customer-ship
+    sectionId: section-sales
+    order: 2
+    name: 得意先（納入先）
+    color: pink
+    fields: [得意先cd]
+  - id: sales-stock
+    sectionId: section-sales
+    order: 3
+    name: 在庫
+    color: aqua
+    fields: [在庫id, 品目, 数量, ロケ]
+
+  - id: acc-purchase-slip
+    sectionId: section-accounting
+    order: 1
+    name: 購買伝票
+    color: pink
+    fields: [伝票id]
+  - id: acc-sales-slip
+    sectionId: section-accounting
+    order: 2
+    name: 売上伝票
+    color: pink
+    fields: [伝票id]
+  - id: acc-journal
+    sectionId: section-accounting
+    order: 3
+    name: 仕訳
+    color: aqua
+    fields: [仕訳id, 日付, 金額, 科目]
+
+relations:
+  - from: human-employee
+    to: human-transfer
+    columns: [社員cd]
+  - from: common-company
+    to: purchase-supplier
+    columns: [企業cd]
+  - from: purchase-supplier
+    to: purchase-po
+    columns: [仕入先cd]
+  - from: purchase-item
+    to: purchase-po
+    columns: [品目id]
+  - from: purchase-item
+    to: production-sale-item
+    columns: [品目id]
+  - from: purchase-po
+    to: production-sale-item
+    columns: [品目id]
+  - from: production-stock
+    to: production-stock-detail
+    columns: [在庫id]
+  - from: production-stock
+    to: sales-stock
+    columns: [在庫id, 数量, 品目, ロケ]
+  - from: purchase-po
+    to: production-stock
+    columns: [数量]
+  - from: purchase-po
+    to: sales-stock
+    columns: [数量]
+  - from: sales-customer
+    to: sales-customer-ship
+    columns: [得意先cd]
+  - from: acc-purchase-slip
+    to: acc-sales-slip
+    columns: [伝票id]
+
+# 社内アプリ側で計算ができない場合は、ここに「計算済みレイアウト」を入れてテンプレへ渡します。
+# （将来的に社内アプリ側で自動計算できるようになったら、この computed は不要です）
+computed:
+  transform:
+    dx: 0
+    dy: 0
+  canvas:
+    width: 1500
+    height: 1034
+  sections:
+    - id: section-human
+      name: 人事システム
+      x: 20
+      y: 20
+      w: 300
+      h: 360
+    - id: section-common
+      name: 共通マスタシステム
+      x: 396
+      y: 20
+      w: 520
+      h: 220
+    - id: section-scm
+      name: SCMシステム
+      x: 992
+      y: 20
+      w: 300
+      h: 320
+    - id: section-purchase
+      name: 購買システム
+      x: 20
+      y: 456
+      w: 300
+      h: 630
+    - id: section-production
+      name: 生産システム
+      x: 396
+      y: 456
+      w: 300
+      h: 630
+    - id: section-sales
+      name: 販売システム
+      x: 772
+      y: 456
+      w: 300
+      h: 630
+    - id: section-accounting
+      name: 会計システム
+      x: 1148
+      y: 456
+      w: 300
+      h: 630
+  tables:
+    - id: human-org
+      name: 組織
+      color: pink
+      x: 42
+      y: 58
+      w: 170
+      h: 48
+      fields: [組織cd]
+    - id: human-employee
+      name: 社員（社員数）
+      color: aqua
+      x: 42
+      y: 158
+      w: 170
+      h: 104
+      fields: [社員cd, 氏名, 資格, 職能, 等級]
+    - id: human-transfer
+      name: 異動
+      color: aqua
+      x: 42
+      y: 278
+      w: 170
+      h: 76
+      fields: [異動id, 社員cd, 日付]
+    - id: common-company
+      name: 企業
+      color: pink
+      x: 418
+      y: 58
+      w: 170
+      h: 76
+      fields: [企業cd, 名称, 住所]
+    - id: common-bank
+      name: 銀行
+      color: pink
+      x: 593
+      y: 58
+      w: 170
+      h: 48
+      fields: [銀行cd]
+    - id: common-branch
+      name: 支店
+      color: pink
+      x: 768
+      y: 58
+      w: 170
+      h: 48
+      fields: [支店cd]
+    - id: scm-part
+      name: 部品
+      color: pink
+      x: 1014
+      y: 58
+      w: 170
+      h: 48
+      fields: [部品cd]
+    - id: purchase-supplier
+      name: 仕入先
+      color: pink
+      x: 42
+      y: 494
+      w: 170
+      h: 76
+      fields: [仕入先cd, 企業cd, 支払条件]
+    - id: purchase-item
+      name: 購買品目
+      color: pink
+      x: 42
+      y: 614
+      w: 170
+      h: 48
+      fields: [品目id]
+    - id: purchase-po
+      name: 購買発注
+      color: yellow
+      x: 42
+      y: 734
+      w: 170
+      h: 90
+      fields: [発注id, 仕入先cd, 品目id, 数量]
+    - id: production-sale-item
+      name: 販売（納入）品目
+      color: pink
+      x: 418
+      y: 494
+      w: 170
+      h: 48
+      fields: [品目id]
+    - id: production-stock
+      name: 在庫
+      color: aqua
+      x: 418
+      y: 614
+      w: 170
+      h: 90
+      fields: [在庫id, 品目, 数量, ロケ]
+    - id: production-stock-detail
+      name: 在庫明細
+      color: aqua
+      x: 418
+      y: 734
+      w: 170
+      h: 76
+      fields: [明細id, 在庫id, 入出庫履歴]
+    - id: sales-customer
+      name: 得意先
+      color: pink
+      x: 794
+      y: 494
+      w: 170
+      h: 48
+      fields: [得意先cd]
+    - id: sales-customer-ship
+      name: 得意先（納入先）
+      color: pink
+      x: 794
+      y: 614
+      w: 170
+      h: 48
+      fields: [得意先cd]
+    - id: sales-stock
+      name: 在庫
+      color: aqua
+      x: 794
+      y: 734
+      w: 170
+      h: 90
+      fields: [在庫id, 品目, 数量, ロケ]
+    - id: acc-purchase-slip
+      name: 購買伝票
+      color: pink
+      x: 1170
+      y: 494
+      w: 170
+      h: 48
+      fields: [伝票id]
+    - id: acc-sales-slip
+      name: 売上伝票
+      color: pink
+      x: 1170
+      y: 614
+      w: 170
+      h: 48
+      fields: [伝票id]
+    - id: acc-journal
+      name: 仕訳
+      color: aqua
+      x: 1170
+      y: 734
+      w: 170
+      h: 90
+      fields: [仕訳id, 日付, 金額, 科目]
+  paths:
+    - d: M127 262 L127 278
+    - d: M503 134 L503 420 L127 420 L127 494
+    - d: M127 570 L127 600 L30 600 L30 720 L134 720 L134 734
+    - d: M127 662 L127 734
+    - d: M212 660 L350 660 L350 540 L418 540
+    - d: M212 787 L364 787 L364 600 L503 600 L503 542
+    - d: M503 704 L503 734
+    - d: M588 653 L650 653 L650 759 L794 759
+    - d: M212 773 L370 773 L370 660 L418 660
+    - d: M212 801 L380 801 L380 860 L780 860 L780 773 L794 773
+    - d: M879 542 L879 614
+    - d: M1255 542 L1255 614

@@ -6,25 +6,24 @@
   <title>{{page.title}}</title>
   <style>
     :root {
-      --blue: #1b3dff;
-      --pink: #e8c9d8;
-      --aqua: #c7f3ff;
-      --yellow: #ffeeb9;
-      --line: #000;
-      --line-thickness: 3px;
-      --gap: 40px;
-      /* 固定キャンバス（鳥瞰図用の資料サイズ） */
-      --canvas-width: 1360px;
-      --canvas-height: 900px;
+      --blue: {{style.nodeBorder}};
+      --pink: {{style.pink}};
+      --aqua: {{style.aqua}};
+      --yellow: {{style.yellow}};
+      --line: {{style.line}};
+      --line-thickness: {{style.lineWidth}}px;
+      --canvas-width: {{computed.canvas.width}}px;
+      --canvas-height: {{computed.canvas.height}}px;
+      --bg: {{style.bg}};
       --font: "MS UI Gothic", "Yu Gothic", "Hiragino Sans", "Meiryo", sans-serif;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: #f8faff;
-      display: block;
+      background: var(--bg);
       padding: 20px;
       font-family: var(--font);
+      color: {{style.text}};
       overflow: auto;
     }
     .page {
@@ -34,7 +33,8 @@
     }
     .page-header {
       display: flex;
-      align-items: center;
+      align-items: baseline;
+      justify-content: space-between;
       gap: 12px;
       margin-bottom: 10px;
       flex-wrap: wrap;
@@ -44,35 +44,27 @@
       font-size: 18px;
       color: #0f2b8f;
     }
+    .note {
+      font-size: 12px;
+      opacity: 0.85;
+    }
+
     .canvas-wrapper {
       width: var(--canvas-width);
       height: var(--canvas-height);
       border: 1px solid #dfe6ff;
       background: #fff;
       box-shadow: 0 16px 32px rgba(0,0,0,0.08);
-      padding: 20px;
       position: relative;
-      margin: 0;
       overflow: hidden;
     }
-    .canvas {
-      display: grid;
-      grid-template-columns: repeat({{grid.columns}}, 300px);
-      gap: {{grid.gap}};
-      width: var(--canvas-width);
-      height: var(--canvas-height);
-      position: relative;
-      z-index: 1;
-    }
+
     .section {
-      position: relative;
+      position: absolute;
       border: 3px solid var(--blue);
       border-radius: 2px;
       padding: 18px 16px 16px;
-      min-width: 240px;
       background: #fff;
-      grid-column: var(--col, auto) / span var(--col-span, 1);
-      grid-row: var(--row, auto) / span var(--row-span, 1);
       z-index: 1;
     }
     .section-title {
@@ -82,18 +74,17 @@
       font-weight: bold;
       color: var(--blue);
       font-size: 14px;
+      background: #fff;
+      padding: 0 6px;
     }
-    .tables {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: flex-start;
-    }
+
     .table {
+      position: absolute;
       border: 1px solid #000;
       background: #fff;
       font-size: 11px;
       line-height: 1.25;
+      z-index: 2;
       min-width: 140px;
     }
     .table.pink { background: var(--pink); }
@@ -105,128 +96,26 @@
       font-weight: bold;
       padding: 3px 6px;
     }
-    .table.pink .header { background: var(--pink); }
-    .table.aqua .header { background: var(--aqua); }
-    .table.yellow .header { background: var(--yellow); }
     .table .body { padding: 6px; }
     .rows { white-space: pre-line; }
-    .pk { font-weight: 700; text-decoration: underline; }
-    .fk { font-weight: 700; }
-    /* 区切り線は関係線と誤認されないように極薄の点線にする */
-    .conn {
-      position: relative;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.18;
-      background-image: repeating-linear-gradient(90deg, #e6eaf4 0 4px, transparent 4px 14px);
-    }
-    .conn-horizontal {
-      height: 1px;
-      align-self: center;
-      justify-self: stretch;
-      background-color: transparent;
-    }
-    .conn-vertical {
-      width: 1px;
-      justify-self: center;
-      align-self: stretch;
-      background-color: transparent;
-      background-image: repeating-linear-gradient(0deg, #e6eaf4 0 4px, transparent 4px 14px);
-    }
 
-    /* 関係線レイヤ（SVG） */
-    .canvas-wrapper { position: relative; }
     .relations {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
-      overflow: visible;
-      z-index: 2;
+      z-index: 3;
     }
     .rel {
       fill: none;
       stroke: #222;
       stroke-width: 2.5;
       stroke-linecap: round;
-      marker: none;
-      marker-end: none;
-      marker-start: none;
     }
-    .rel-flow { stroke-width: 3; }
-    .rel-ref { stroke-dasharray: 6 4; opacity: 0.9; }
-    .rel-cross { stroke-width: 3.5; }
-    .rel-label {
-      font-size: 12px;
-      fill: #111;
-      paint-order: stroke;
-      stroke: #fff;
-      stroke-width: 4px;
-    }
+    .rel-ref { opacity: 0.9; }
 
-    .legend {
-      display: inline-flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-    }
-    .legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 8px;
-      background: #fff;
-      border: 1px solid #dfe6ff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      border-radius: 12px;
-      white-space: nowrap;
-    }
-    .legend-chip {
-      width: 18px;
-      height: 18px;
-      border: 1px solid #000;
-      box-sizing: border-box;
-    }
-    .legend-chip.pink { background: var(--pink); }
-    .legend-chip.aqua { background: var(--aqua); }
-    .legend-chip.yellow { background: var(--yellow); }
-    .legend-line {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 8px;
-      border: 1px solid #dfe6ff;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-    .legend-line-swatch {
-      width: 34px;
-      height: 6px;
-      border-radius: 999px;
-    }
-    .legend-line-flow { background: #222; height: 8px; }
-    .legend-line-ref { background-image: linear-gradient(90deg, #222 50%, rgba(0,0,0,0) 0%); background-size: 10px 2px; background-repeat: repeat-x; }
-    .legend-line-cross { background: #222; height: 8px; border-width: 2px; border-style: solid; }
-    .legend-mult {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 8px;
-      border-radius: 10px;
-      background: #f5f6fb;
-      border: 1px solid #dfe6ff;
-      font-weight: 700;
-      font-size: 11px;
-    }
-
-    /* 印刷（A4横） */
-    @page {
-      size: A4 landscape;
-      margin: 10mm;
-    }
+    @page { size: A4 landscape; margin: 10mm; }
     @media print {
       body { background: #fff; padding: 0; }
       .canvas-wrapper { box-shadow: none; border: 0; }
@@ -237,57 +126,33 @@
   <div class="page">
     <div class="page-header">
       <h1 class="page-title">{{page.title}}</h1>
-      <div class="legend">
-        {{#page.legend}}
-        <div class="legend-item">
-          <span class="legend-chip {{color}}"></span>
-          <span>{{label}}</span>
-        </div>
-        {{/page.legend}}
-        <div class="legend-line">
-          <span class="legend-line-swatch legend-line-flow"></span><span>主要業務フロー</span>
-        </div>
-        <div class="legend-line">
-          <span class="legend-line-swatch legend-line-ref"></span><span>マスタ参照</span>
-        </div>
-        <div class="legend-line">
-          <span class="legend-line-swatch legend-line-cross"></span><span>システム跨ぎ強調</span>
-        </div>
-        <div class="legend-line">
-          <span class="legend-mult">1 / N / 0..1</span><span>多重度</span>
-        </div>
-      </div>
+      <div class="note">{{page.legendNote}}</div>
     </div>
+
     <div class="canvas-wrapper">
-      <!-- BEGIN AUTO-RELATIONS -->
-<svg class="relations" viewBox="0 0 1360 900" preserveAspectRatio="none" aria-hidden="true">
+      <svg class="relations" viewBox="0 0 {{computed.canvas.width}} {{computed.canvas.height}}" preserveAspectRatio="none" aria-hidden="true">
         <defs>
           <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
             <path d="M 0 0 L 10 5 L 0 10 z" fill="#222"></path>
           </marker>
         </defs>
-        <!-- 人事システム: 組織 → 従業員（参照）, 従業員 → 異動（フロー） -->
-        <path class="rel rel-ref" marker-end="url(#arrowhead)" d="M 90 125 L 90 215"></path>
-        <path class="rel rel-flow" marker-end="url(#arrowhead)" d="M 90 235 L 90 325"></path>
+        {{#computed.paths}}
+        <path class="rel rel-ref" marker-end="url(#arrowhead)" d="{{d}}"></path>
+        {{/computed.paths}}
       </svg>
-<!-- END AUTO-RELATIONS -->
-      <div class="canvas">
 
-        {{#sections}}
-        <div class="section" id="{{id}}" style="--row: {{grid.row}}; --col: {{grid.column}}; --col-span: {{grid.column_span}}; --row-span: {{grid.row_span}};">
-          <div class="section-title">{{name}}</div>
-          <div class="tables">
-            {{#tables}}
-            <div class="table {{color}}" id="E-{{id}}" data-entity-id="{{id}}" data-system="{{system}}">
-              <div class="header">{{name}}</div>
-              <div class="body rows">{{#fields}}{{.}}&#10;{{/fields}}</div>
-            </div>
-            {{/tables}}
-          </div>
-        </div>
-        {{/sections}}
-
+      {{#computed.sections}}
+      <div class="section" id="{{id}}" style="left: {{x}}px; top: {{y}}px; width: {{w}}px; height: {{h}}px;">
+        <div class="section-title">{{name}}</div>
       </div>
+      {{/computed.sections}}
+
+      {{#computed.tables}}
+      <div class="table {{color}}" id="E-{{id}}" style="left: {{x}}px; top: {{y}}px; width: {{w}}px; height: {{h}}px;">
+        <div class="header">{{name}}</div>
+        <div class="body rows">{{#fields}}{{.}}&#10;{{/fields}}</div>
+      </div>
+      {{/computed.tables}}
     </div>
   </div>
 </body>

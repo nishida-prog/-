@@ -1,94 +1,152 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{page.title}}</title>
+<style>
+  :root{
+    --bg:{{style.bg}};
+    --node-bg:{{style.nodeBg}};
+    --node-border:{{style.nodeBorder}};
+    --header-bg:{{style.headerBg}};
+    --text:{{style.text}};
+    --line:{{style.line}};
+    --line-w:{{style.lineWidth}};
+    --pink:{{style.pink}};
+    --aqua:{{style.aqua}};
+    --yellow:{{style.yellow}};
+    --table-w:{{style.tableWidth}};
+    font-family: system-ui, "Yu Gothic", "Meiryo", sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);}
+  #canvas{
+    position:relative;
+    width:{{computed.canvas.width}}px;height:{{computed.canvas.height}}px;
+    margin:0 auto;
+    padding:{{style.canvasPadding}};
+  }
+  #stage{
+    position:absolute;
+    inset:0;
+    transform: translate({{computed.transform.dx}}px, {{computed.transform.dy}}px);
+    transform-origin: 0 0;
+  }
+  #links{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    pointer-events:none; z-index:3;
+  }
+  #tables-layer{
+    position:absolute;
+    inset:0;
+    z-index:2;
+  }
+  .section{
+    position:absolute;
+    border:3px solid var(--node-border);
+    background:#fff;
+    padding:18px 12px 12px;
+    border-radius:2px;
+    z-index:1;
+  }
+  .section-title{
+    position:absolute; top:-18px; left:10px;
+    font-weight:700; color:var(--node-border); font-size:14px;
+    background:var(--bg); padding:0 4px;
+  }
+  .tables{
+    position:relative;
+    width:100%;
+    height:100%;
+  }
+  .table{
+    border:1px solid #000;
+    background:#fff;
+    font-size:11px; line-height:1.25;
+    position:absolute;
+    left:var(--x, 0px);
+    top:var(--y, 0px);
+    width:var(--w, var(--table-w));
+    height:var(--h, auto);
+    z-index:2;
+  }
+  #links path{
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+  .table.pink{ background:var(--pink); }
+  .table.aqua{ background:var(--aqua); }
+  .table.yellow{ background:var(--yellow); }
+  .table .header{
+    background:#f3f3f3;
+    border-bottom:1px solid #000;
+    font-weight:700;
+    padding:3px 6px;
+  }
+  .table .body{
+    padding:6px;
+    white-space:pre-line;
+    height:calc(var(--h, var(--table-h)) - 22px);
+    overflow:hidden;
+  }
+  .legend{
+    position:fixed; right:16px; bottom:16px;
+    font-size:12px; background:#fff; border:1px solid #dfe6ff;
+    padding:8px 10px; border-radius:8px; z-index:3;
+    box-shadow:0 6px 16px rgba(0,0,0,.08);
+  }
+</style>
+</head>
+<body>
+<div id="canvas">
+  <div id="stage">
+  <!-- relation links (orthogonal, fixed coordinates) -->
+  <svg id="links" viewBox="0 0 {{computed.canvas.width}} {{computed.canvas.height}}" width="{{computed.canvas.width}}" height="{{computed.canvas.height}}" aria-label="ER links">
+    <!--
+      Table coordinates are defined in each .table's inline style as CSS variables:
+        style="--x:<px>; --y:<px>;"
+      These are CANVAS coordinates (same origin as this SVG's viewBox).
 
-  <div class="title">{{#meta.is_quotation}}見積書{{/meta.is_quotation}}{{#meta.is_invoice}}請求書{{/meta.is_invoice}}{{#meta.is_delivery}}納品書{{/meta.is_delivery}}</div>
+      When you want to draw a relation from Table A to Table B:
+        1) Decide the anchor point on each table (top/bottom/left/right center).
+        2) Compute anchor coordinates from (--x,--y) and table size:
+           - top center:    (x + w/2, y)
+           - bottom center: (x + w/2, y + h)
+           - left center:   (x,       y + h/2)
+           - right center:  (x + w,   y + h/2)
+        3) Write an orthogonal path using only M/L with horizontal/vertical segments.
+    -->
+    {{#computed.paths}}
+    <path d="{{d}}" fill="none" stroke="var(--line)" stroke-width="var(--line-w)"/>
+    {{/computed.paths}}
+  </svg>
 
-  <div class="addr">
-    <div class="left">
-      <p>〒{{customer.postal}}<br>{{customer.address_line1}}{{#customer.address_line2}}<br>{{customer.address_line2}}{{/customer.address_line2}}</p>
-      <p>{{customer.company}}<br>御中　{{customer.attention}} </p>
-      <p class="subject-line">{{meta.subject}}</p>
-    </div>
-    <div class="right">
-      <div style="font-size:12px;">発行日:{{meta.issue_date}}<br>伝票番号:{{meta.slip_no}}</div>
-      <div class="box" style="margin-top:4mm; text-align:center; margin-left:-13mm; padding:6mm; border:none;">
-        {{#seller.logo_url}}<img src="{{seller.logo_url}}" alt="LOGO" class="logo"><br>{{/seller.logo_url}}
-        <div class="seller-info">
-          {{seller.name}}<br>
-          〒{{seller.postal}}　{{seller.address}}<br>
-          電話:{{seller.tel}}<br>
-          E-mail:{{seller.email}}
-        </div>
-      </div>
-    </div>
+  {{#computed.sections}}
+  <div class="section" id="{{id}}" style="left:{{x}}px; top:{{y}}px; width:{{w}}px; height:{{h}}px;">
+    <div class="section-title">{{name}}</div>
   </div>
+  {{/computed.sections}}
 
-  <div class="amount-pay">
-    <div class="amount-box">
-      <div class="label">
-        {{#meta.is_quotation}}{{amount_box.quotation_label}}{{/meta.is_quotation}}
-        {{#meta.is_invoice}}{{amount_box.invoice_label}}{{/meta.is_invoice}}
-        {{#meta.is_delivery}}{{amount_box.delivery_label}}{{/meta.is_delivery}}
-      </div>
-      <div class="val">{{totals.total}}円</div>
+  <!-- Tables are positioned in canvas coordinates (same origin as #links SVG) -->
+  <div id="tables-layer" aria-label="Tables">
+    {{#computed.tables}}
+    <div class="table {{color}}" id="{{id}}" style="--x:{{x}}px; --y:{{y}}px; --w:{{w}}px; --h:{{h}}px;">
+      <div class="header">{{name}}</div>
+      <div class="body">{{#fields}}{{.}}
+{{/fields}}</div>
     </div>
-    <div class="pay-box">
-      <table>
-        <tr>
-          <th>振込先</th>
-          <td>
-            {{payment.bank}}<br>
-            {{payment.branch}}<br>
-            （{{payment.account_type}}:{{payment.account_no}}）<br>
-            {{seller.name}}
-          </td>
-        </tr>
-        <tr><th>支払期日</th><td>{{payment.due_date}}</td></tr>
-      </table>
-    </div>
+    {{/computed.tables}}
   </div>
-
-  <div class="items">
-    <table class="items-table">
-      <thead>
-        <tr>
-          <th class="desc">摘要</th>
-          <th class="qty">数量</th>
-          <th class="unit">単価</th>
-          <th class="amt">金額</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#items}}
-        <tr>
-          <td class="desc no-rule">{{name}}</td>
-          <td class="qty">{{qty}}</td>
-          <td class="unit">{{unit_price}}</td>
-          <td class="amt">{{amount}}</td>
-        </tr>
-        {{#breakdown}}
-        <tr class="sub">
-          <td class="desc" colspan="4"><span class="bullet"></span>{{.}}</td>
-        </tr>
-        {{/breakdown}}
-        <tr class="section-gap"><td colspan="4">&nbsp;</td></tr>
-        {{/items}}
-      </tbody>
-    </table>
   </div>
+</div>
 
-  <div class="totals-row" style="margin-top:2mm;">
-    <div></div>
-    <div class="totals">
-      <table>
-        <tr><td class="label">小計</td><td class="val">{{totals.subtotal}}</td></tr>
-        <tr><td class="label">消費税10%</td><td class="val">{{totals.tax}}</td></tr>
-        <tr class="grand"><td class="label">合計金額</td><td class="val">{{totals.total}}</td></tr>
-      </table>
-    </div>
-  </div>
+{{#page.legendNote}}
+<div class="legend">
+  {{page.legendNote}}
+</div>
+{{/page.legendNote}}
 
-  <div class="note">
-    <div class="head">備考</div>
-    <div class="body">{{notes}}</div>
-  </div>
-
-</div></div>
+</body>
+</html>
