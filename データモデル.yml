@@ -65,121 +65,102 @@ tables:
     order: 1
     name: 組織
     color: pink
-    fields: [組織cd]
   - id: human-employee
     sectionId: section-human
     order: 2
     name: 社員（社員数）
     color: aqua
-    fields: [社員cd, 氏名, 資格, 職能, 等級]
   - id: human-transfer
     sectionId: section-human
     order: 3
     name: 異動
     color: aqua
-    fields: [異動id, 社員cd, 日付]
 
   - id: common-company
     sectionId: section-common
     order: 1
     name: 企業
     color: pink
-    fields: [企業cd, 名称, 住所]
   - id: common-bank
     sectionId: section-common
     order: 2
     name: 銀行
     color: pink
-    fields: [銀行cd]
   - id: common-branch
     sectionId: section-common
     order: 3
     name: 支店
     color: pink
-    fields: [支店cd]
 
   - id: scm-part
     sectionId: section-scm
     order: 1
     name: 部品
     color: pink
-    fields: [部品cd]
 
   - id: purchase-supplier
     sectionId: section-purchase
     order: 1
     name: 仕入先
     color: pink
-    fields: [仕入先cd, 企業cd, 支払条件]
   - id: purchase-item
     sectionId: section-purchase
     order: 2
     name: 購買品目
     color: pink
-    fields: [品目id]
   - id: purchase-po
     sectionId: section-purchase
     order: 3
     name: 購買発注
     color: yellow
-    fields: [発注id, 仕入先cd, 品目id, 数量]
 
   - id: production-sale-item
     sectionId: section-production
     order: 1
     name: 販売（納入）品目
     color: pink
-    fields: [品目id]
   - id: production-stock
     sectionId: section-production
     order: 2
     name: 在庫
     color: aqua
-    fields: [在庫id, 品目, 数量, ロケ]
   - id: production-stock-detail
     sectionId: section-production
     order: 3
     name: 在庫明細
     color: aqua
-    fields: [明細id, 在庫id, 入出庫履歴]
 
   - id: sales-customer
     sectionId: section-sales
     order: 1
     name: 得意先
     color: pink
-    fields: [得意先cd]
   - id: sales-customer-ship
     sectionId: section-sales
     order: 2
     name: 得意先（納入先）
     color: pink
-    fields: [得意先cd]
   - id: sales-stock
     sectionId: section-sales
     order: 3
     name: 在庫
     color: aqua
-    fields: [在庫id, 品目, 数量, ロケ]
 
   - id: acc-purchase-slip
     sectionId: section-accounting
     order: 1
     name: 購買伝票
     color: pink
-    fields: [伝票id]
   - id: acc-sales-slip
     sectionId: section-accounting
     order: 2
     name: 売上伝票
     color: pink
-    fields: [伝票id]
   - id: acc-journal
     sectionId: section-accounting
     order: 3
     name: 仕訳
     color: aqua
-    fields: [仕訳id, 日付, 金額, 科目]
 
 relations:
   - from: human-employee
@@ -277,7 +258,6 @@ computed:
       y: 58
       w: 170
       h: 48
-      fields: [組織cd]
     - id: human-employee
       name: 社員（社員数）
       color: aqua
@@ -285,7 +265,6 @@ computed:
       y: 158
       w: 170
       h: 104
-      fields: [社員cd, 氏名, 資格, 職能, 等級]
     - id: human-transfer
       name: 異動
       color: aqua
@@ -293,7 +272,6 @@ computed:
       y: 278
       w: 170
       h: 76
-      fields: [異動id, 社員cd, 日付]
     - id: common-company
       name: 企業
       color: pink
@@ -301,7 +279,6 @@ computed:
       y: 58
       w: 170
       h: 76
-      fields: [企業cd, 名称, 住所]
     - id: common-bank
       name: 銀行
       color: pink
@@ -309,7 +286,6 @@ computed:
       y: 58
       w: 170
       h: 48
-      fields: [銀行cd]
     - id: common-branch
       name: 支店
       color: pink
@@ -317,7 +293,6 @@ computed:
       y: 58
       w: 170
       h: 48
-      fields: [支店cd]
     - id: scm-part
       name: 部品
       color: pink
@@ -325,7 +300,6 @@ computed:
       y: 58
       w: 170
       h: 48
-      fields: [部品cd]
     - id: purchase-supplier
       name: 仕入先
       color: pink
@@ -333,7 +307,6 @@ computed:
       y: 494
       w: 170
       h: 76
-      fields: [仕入先cd, 企業cd, 支払条件]
     - id: purchase-item
       name: 購買品目
       color: pink
@@ -341,7 +314,6 @@ computed:
       y: 614
       w: 170
       h: 48
-      fields: [品目id]
     - id: purchase-po
       name: 購買発注
       color: yellow
@@ -349,7 +321,6 @@ computed:
       y: 734
       w: 170
       h: 90
-      fields: [発注id, 仕入先cd, 品目id, 数量]
     - id: production-sale-item
       name: 販売（納入）品目
       color: pink
@@ -357,7 +328,6 @@ computed:
       y: 494
       w: 170
       h: 48
-      fields: [品目id]
     - id: production-stock
       name: 在庫
       color: aqua
@@ -365,7 +335,6 @@ computed:
       y: 614
       w: 170
       h: 90
-      fields: [在庫id, 品目, 数量, ロケ]
     - id: production-stock-detail
       name: 在庫明細
       color: aqua
@@ -373,7 +342,6 @@ computed:
       y: 734
       w: 170
       h: 76
-      fields: [明細id, 在庫id, 入出庫履歴]
     - id: sales-customer
       name: 得意先
       color: pink
@@ -381,7 +349,6 @@ computed:
       y: 494
       w: 170
       h: 48
-      fields: [得意先cd]
     - id: sales-customer-ship
       name: 得意先（納入先）
       color: pink
@@ -389,7 +356,6 @@ computed:
       y: 614
       w: 170
       h: 48
-      fields: [得意先cd]
     - id: sales-stock
       name: 在庫
       color: aqua
@@ -397,7 +363,6 @@ computed:
       y: 734
       w: 170
       h: 90
-      fields: [在庫id, 品目, 数量, ロケ]
     - id: acc-purchase-slip
       name: 購買伝票
       color: pink
@@ -405,7 +370,6 @@ computed:
       y: 494
       w: 170
       h: 48
-      fields: [伝票id]
     - id: acc-sales-slip
       name: 売上伝票
       color: pink
@@ -413,7 +377,6 @@ computed:
       y: 614
       w: 170
       h: 48
-      fields: [伝票id]
     - id: acc-journal
       name: 仕訳
       color: aqua
@@ -421,17 +384,16 @@ computed:
       y: 734
       w: 170
       h: 90
-      fields: [仕訳id, 日付, 金額, 科目]
   paths:
     - d: M127 262 L127 278
     - d: M503 134 L503 420 L127 420 L127 494
     - d: M127 570 L127 600 L30 600 L30 720 L134 720 L134 734
     - d: M127 662 L127 734
-    - d: M212 660 L350 660 L350 540 L418 540
+    - d: M418 540 L350 540 L350 660 L212 660
     - d: M503 542 L503 600 L364 600 L364 787 L212 787
     - d: M503 704 L503 734
     - d: M588 653 L650 653 L650 759 L794 759
-    - d: M212 773 L370 773 L370 660 L418 660
-    - d: M212 801 L380 801 L380 860 L780 860 L780 773 L794 773
+    - d: M418 660 L370 660 L370 773 L212 773
+    - d: M794 773 L780 773 L780 860 L380 860 L380 801 L212 801
     - d: M879 542 L879 614
     - d: M1255 542 L1255 614

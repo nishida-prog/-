@@ -104,6 +104,11 @@
   <div id="stage">
   <!-- relation links (orthogonal, fixed coordinates) -->
   <svg id="links" viewBox="0 0 {{computed.canvas.width}} {{computed.canvas.height}}" width="{{computed.canvas.width}}" height="{{computed.canvas.height}}" aria-label="ER links">
+    <defs>
+      <marker id="arrow" markerWidth="4" markerHeight="4" refX="3.6" refY="2" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L4,2 L0,4 Z" fill="var(--line)"></path>
+      </marker>
+    </defs>
     <!--
       Table coordinates are defined in each .table's inline style as CSS variables:
         style="--x:<px>; --y:<px>;"
@@ -119,7 +124,7 @@
         3) Write an orthogonal path using only M/L with horizontal/vertical segments.
     -->
     {{#computed.paths}}
-    <path d="{{d}}" fill="none" stroke="var(--line)" stroke-width="var(--line-w)"/>
+    <path d="{{d}}" fill="none" stroke="var(--line)" stroke-width="var(--line-w)" {{#arrowEnd}}marker-end="url(#arrow)"{{/arrowEnd}}/>
     {{/computed.paths}}
   </svg>
 

@@ -82,8 +82,10 @@
       position: absolute;
       border: 1px solid #000;
       background: #fff;
-      font-size: 11px;
-      line-height: 1.25;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       z-index: 2;
       min-width: 140px;
     }
@@ -92,12 +94,12 @@
     .table.yellow { background: var(--yellow); }
     .table .header {
       background: inherit;
-      border-bottom: 1px solid #000;
       font-weight: bold;
-      padding: 3px 6px;
+      padding: 8px 10px;
+      font-size: 16px;
+      line-height: 1.2;
+      width: 100%;
     }
-    .table .body { padding: 6px; }
-    .rows { white-space: pre-line; }
 
     .relations {
       position: absolute;
@@ -132,7 +134,7 @@
     <div class="canvas-wrapper">
       <svg class="relations" viewBox="0 0 {{computed.canvas.width}} {{computed.canvas.height}}" preserveAspectRatio="none" aria-hidden="true">
         <defs>
-          <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
             <path d="M 0 0 L 10 5 L 0 10 z" fill="#222"></path>
           </marker>
         </defs>
@@ -150,7 +152,6 @@
       {{#computed.tables}}
       <div class="table {{color}}" id="E-{{id}}" style="left: {{x}}px; top: {{y}}px; width: {{w}}px; height: {{h}}px;">
         <div class="header">{{name}}</div>
-        <div class="body rows">{{#fields}}{{.}}&#10;{{/fields}}</div>
       </div>
       {{/computed.tables}}
     </div>
